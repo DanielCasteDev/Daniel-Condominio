@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import fondoImage from '../../assets/fondo.jpg';
+import logo from '/logoceleste.png'; // Importa tu logo
 
 const Verificar: React.FC = () => {
   const navigate = useNavigate();
@@ -10,33 +11,25 @@ const Verificar: React.FC = () => {
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(false);
   const expectedCode = '123456'; // Código de verificación esperado
 
-  // Función que maneja la verificación del código
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const code = verificationCode.join('');
     if (code === expectedCode) {
-      toast.success('Código correcto. Redirigiendo...', {
-        duration: 2000,
-      });
+      toast.success('Código correcto. Redirigiendo...', { duration: 2000 });
       setTimeout(() => {
-        navigate('/Dashboard'); // Redirige a la página deseada
+        navigate('/Dashboard');
       }, 2000);
     } else {
-      toast.error('Código incorrecto. Inténtalo de nuevo.', {
-        duration: 3000,
-      });
+      toast.error('Código incorrecto. Inténtalo de nuevo.', { duration: 3000 });
     }
   };
 
-  // Función que maneja el cambio de los campos de entrada
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
       const newCode = [...verificationCode];
       newCode[index] = value.slice(0, 1); // Permitir solo un dígito
       setVerificationCode(newCode);
-
-      // Mover al siguiente campo si se ha ingresado un dígito
       if (value.length === 1 && index < 5) {
         const nextInput = document.getElementById(`input-${index + 1}`);
         if (nextInput) {
@@ -46,10 +39,8 @@ const Verificar: React.FC = () => {
     }
   };
 
-  // Función que maneja la tecla de retroceso
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace' && verificationCode[index] === '') {
-      // Enfocar el campo anterior si se presiona backspace en un campo vacío
       if (index > 0) {
         const prevInput = document.getElementById(`input-${index - 1}`);
         if (prevInput) {
@@ -59,42 +50,40 @@ const Verificar: React.FC = () => {
     }
   };
 
-  // Función que reinicia el temporizador para reenviar el código
   const handleResendCode = () => {
     if (!isResendDisabled) {
       setIsResendDisabled(true);
-      setTimer(60); // Reinicia el temporizador a 60 segundos
+      setTimer(60);
     }
   };
 
-  // Lógica del temporizador
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>; // Usar tipo correcto para setInterval
+    let interval: ReturnType<typeof setInterval>;
     if (isResendDisabled && timer > 0) {
       interval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      setIsResendDisabled(false); // Habilitar el botón cuando el temporizador termine
+      setIsResendDisabled(false);
     }
-    // Limpiar el intervalo cuando el componente se desmonte o cuando el temporizador llegue a 0
     return () => clearInterval(interval);
   }, [isResendDisabled, timer]);
 
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${fondoImage})`,
-      }}
+      style={{ backgroundImage: `url(${fondoImage})` }}
     >
       <Toaster position="top-center" />
       <div className="bg-white bg-opacity-80 rounded-lg p-8 w-11/12 sm:w-1/2 md:w-1/3 shadow-xl">
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <img src={logo} alt="Logo" className="h-16" />
+        </div>
+
         <h1
           className="text-4xl font-bold text-center text-black mb-6"
-          style={{
-            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.6)',
-          }}
+          style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.6)' }}
         >
           VERIFICAR CÓDIGO
         </h1>
@@ -104,7 +93,7 @@ const Verificar: React.FC = () => {
               <input
                 key={index}
                 id={`input-${index}`}
-                type="text" // Mantener tipo texto para mostrar los números
+                type="text"
                 value={digit}
                 onChange={(e) => handleInputChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
@@ -124,7 +113,6 @@ const Verificar: React.FC = () => {
           Ingresa el código de 6 dígitos que te hemos enviado a tu <b className="text-black">CELULAR</b>.
         </p>
 
-        {/* Botón de reenviar código */}
         <div className="mt-4 text-center">
           <button
             onClick={handleResendCode}

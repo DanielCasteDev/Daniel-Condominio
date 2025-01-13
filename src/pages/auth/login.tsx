@@ -42,6 +42,14 @@ const Login: React.FC = () => {
     >
       <Toaster position="top-center" />
       <div className="bg-white bg-opacity-80 rounded-lg p-8 w-11/12 sm:w-1/2 md:w-1/3 shadow-xl">
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <img
+            src="/logoceleste.png"
+            alt="Logo"
+            className="w-32 h-auto" // Ajusta el tamaño del logo
+          />
+        </div>
         <h1
           className="text-4xl font-bold text-center text-black mb-6"
           style={{
