@@ -1,6 +1,6 @@
-# Castellanos Ortiz Justin Daniel
+# Castellanos Ortiz Justin Daniel  
 
-8°A
-IDGS
-UTZMG
-DESARROLLO WEB PROFESIONAL
+**Grupo:** 8°A  
+**Carrera:** IDGS  
+**Universidad:** UTZMG  
+**Materia:** Desarrollo Web Profesional  
