@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import fondoImage from '../../assets/fondo.jpg';
-import logo from '/logoceleste.png'; // Importa tu logo
+import logo from '/logoceleste.png'; 
 
 const Verificar: React.FC = () => {
   const navigate = useNavigate();
   const [verificationCode, setVerificationCode] = useState<string[]>(['', '', '', '', '', '']);
-  const [timer, setTimer] = useState<number>(60); // 1 minuto
+  const [timer, setTimer] = useState<number>(60);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(false);
-  const expectedCode = '123456'; // Código de verificación esperado
+  const expectedCode = '123456'; 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const Verificar: React.FC = () => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
       const newCode = [...verificationCode];
-      newCode[index] = value.slice(0, 1); // Permitir solo un dígito
+      newCode[index] = value.slice(0, 1);
       setVerificationCode(newCode);
       if (value.length === 1 && index < 5) {
         const nextInput = document.getElementById(`input-${index + 1}`);
@@ -76,7 +76,6 @@ const Verificar: React.FC = () => {
     >
       <Toaster position="top-center" />
       <div className="bg-white bg-opacity-80 rounded-lg p-8 w-11/12 sm:w-1/2 md:w-1/3 shadow-xl">
-        {/* Logo */}
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="h-16" />
         </div>
