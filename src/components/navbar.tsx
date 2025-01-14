@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/Multas"
+              to="/MultasAd"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <DocumentTextIcon className="h-6 w-6 mr-4" />
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/PermisosPortones"
+              to="/PermisosAd"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <LockClosedIcon className="h-6 w-6 mr-4" />
@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/Pagos"
+              to="/PagosAd"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <CurrencyDollarIcon className="h-6 w-6 mr-4" />
