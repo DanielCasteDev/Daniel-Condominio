@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HomeIcon, UserIcon, CurrencyDollarIcon, LockClosedIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, UserIcon, CurrencyDollarIcon, LockClosedIcon, DocumentTextIcon, PowerIcon } from '@heroicons/react/24/outline';
 
 const Navbar: React.FC = () => {
   return (
@@ -58,6 +58,20 @@ const Navbar: React.FC = () => {
             >
               <CurrencyDollarIcon className="h-6 w-6 mr-4" />
               Pagos
+            </Link>
+          </li>
+        </ul>
+      </nav>
+
+      <nav className="mt-auto">
+        <ul>
+          <li>
+            <Link
+              to="/" // Adjust to the actual log out route
+              className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
+            >
+              <PowerIcon className="h-6 w-6 mr-4" />
+              Cerrar sesión
             </Link>
           </li>
         </ul>
