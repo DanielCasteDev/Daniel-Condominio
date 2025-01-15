@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar.ad';
 import Modal from '../../utils/admin/modal.usr.ad'; // Importa el componente Modal
-import { UilEdit, UilTrashAlt } from '@iconscout/react-unicons'; // Importa los íconos de Unicons
+import { PencilSquareIcon,TrashIcon } from '@heroicons/react/24/outline';
 
 
 const Usuarios: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 9;
+  const usersPerPage = 6;
   const [users, setUsers] = useState([
     { id: 1, name: 'Juan Pérez', email: 'juan@correo.com', phone: '555-1234', profile: 'Admin', department: 'Ventas', tower: 'A' },
     { id: 2, name: 'María López', email: 'maria@correo.com', phone: '555-5678', profile: 'Usuario', department: 'Soporte', tower: 'B' },
@@ -140,10 +140,10 @@ const handleDeleteUser = (userId: number) => {
                       <td className="px-6 py-4">{user.email}</td>
                       <td className="px-6 py-4 flex space-x-4">
                         <button onClick={() => handleOpenModal(user)} className="text-blue-500 hover:text-blue-700">
-                          <UilEdit size="20" />
+                          <PencilSquareIcon className='w-5 h-5' />
                         </button>
                         <button onClick={() => handleDeleteUser(user.id)} className="text-red-500 hover:text-red-700">
-                          <UilTrashAlt size="20" />
+                          <TrashIcon className='w-5 h-5' />
                         </button>
                       </td>
                     </tr>

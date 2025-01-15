@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar.ad';
 import Modal from '../../utils/admin/modal.perm.ad'; // Modal reutilizado para permisos
-import { UilEdit, UilTrashAlt } from '@iconscout/react-unicons'; // Íconos de Unicons
+import { PencilSquareIcon,TrashIcon } from '@heroicons/react/24/outline';
 
 const Permisos: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const permisosPerPage = 9; // Total de permisos por página
+  const permisosPerPage = 6; // Total de permisos por página
   const [permisos, setPermisos] = useState([
     { id: 1, usuario: 'Juan Pérez', nombreCompleto: 'Juan Pérez', departamento: 'Ventas', torre: 'A', permisos: 2 },
     { id: 2, usuario: 'María López', nombreCompleto: 'María López', departamento: 'Soporte', torre: 'B', permisos: 1 },
@@ -132,10 +132,10 @@ const Permisos: React.FC = () => {
                       <td className="px-6 py-4">{permiso.permisos}</td>
                       <td className="px-6 py-4 flex space-x-4">
                         <button onClick={() => handleOpenModal(permiso)} className="text-blue-500 hover:text-blue-700">
-                          <UilEdit size="20" />
+                          <PencilSquareIcon className='w-5 h-5' />
                         </button>
                         <button onClick={() => handleDeletePermiso(permiso.id)} className="text-red-500 hover:text-red-700">
-                          <UilTrashAlt size="20" />
+                          <TrashIcon className='w-5 h-5' />
                         </button>
                       </td>
                     </tr>

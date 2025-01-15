@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar.ad';
 import Modal from '../../utils/admin/modal.multa.ad'; // Modal reutilizado
-import { UilEdit, UilTrashAlt } from '@iconscout/react-unicons'; // Íconos de Unicons
+import { PencilSquareIcon,TrashIcon } from '@heroicons/react/24/outline';
 
 const Multas: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const multasPerPage = 9; // Total de multas por página
+  const multasPerPage = 6; // Total de multas por página
   const [multas, setMultas] = useState([
     { id: 1, usuario: 'Juan Pérez', nombreCompleto: 'Juan Pérez', departamento: 'Ventas', torre: 'A', multas: 2 },
     { id: 2, usuario: 'María López', nombreCompleto: 'María López', departamento: 'Soporte', torre: 'B', multas: 1 },
@@ -132,10 +132,10 @@ const Multas: React.FC = () => {
                       <td className="px-6 py-4">{multa.multas}</td>
                       <td className="px-6 py-4 flex space-x-4">
                         <button onClick={() => handleOpenModal(multa)} className="text-blue-500 hover:text-blue-700">
-                          <UilEdit size="20" />
+                          <PencilSquareIcon className='w-5 h-5' />
                         </button>
                         <button onClick={() => handleDeleteMulta(multa.id)} className="text-red-500 hover:text-red-700">
-                          <UilTrashAlt size="20" />
+                        <TrashIcon className='w-5 h-5' />
                         </button>
                       </td>
                     </tr>
