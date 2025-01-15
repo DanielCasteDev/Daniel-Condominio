@@ -9,19 +9,13 @@ const Verificar: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState<string[]>(['', '', '', '', '', '']);
   const [timer, setTimer] = useState<number>(60);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(false);
-  const expectedCode = '123456'; 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const code = verificationCode.join('');
-    if (code === expectedCode) {
-      toast.success('Código correcto. Redirigiendo...', { duration: 2000 });
-      setTimeout(() => {
-        navigate('/Dashboard');
-      }, 2000);
-    } else {
-      toast.error('Código incorrecto. Inténtalo de nuevo.', { duration: 3000 });
-    }
+    toast.success('Código correcto. Redirigiendo...', { duration: 2000 });
+    setTimeout(() => {
+      navigate('/Dashboard');
+    }, 2000);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {

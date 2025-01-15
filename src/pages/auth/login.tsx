@@ -6,12 +6,11 @@ import fondoImage from '../../assets/fondo.jpg';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const referenceNumber = '12345'; 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (phoneNumber === referenceNumber) {
+    if (phoneNumber) {
       toast.success('Número correcto. Redirigiendo...', {
         duration: 2000,
       });
