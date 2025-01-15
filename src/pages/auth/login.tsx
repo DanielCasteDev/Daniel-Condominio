@@ -10,18 +10,12 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (phoneNumber) {
-      toast.success('Número correcto. Redirigiendo...', {
-        duration: 2000,
-      });
-      setTimeout(() => {
-        navigate('/Verificar');
-      }, 2000);
-    } else {
-      toast.error('Número incorrecto. Inténtalo de nuevo.', {
-        duration: 3000,
-      });
-    }
+    toast.success('Número correcto. Redirigiendo...', {
+      duration: 2000,
+    });
+    setTimeout(() => {
+      navigate('/Verificar');
+    }, 2000);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,24 +50,23 @@ const Login: React.FC = () => {
           INICIAR SESIÓN
         </h1>
         <form onSubmit={handleSubmit} className="relative">
-  <div className="flex flex-col items-start border rounded-lg overflow-hidden shadow-md p-4">
-    <input
-      type="text"
-      placeholder="Número de Celular"
-      value={phoneNumber}
-      onChange={handleInputChange}
-      className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md"
-      maxLength={10} 
-    />
-    <button
-      type="submit"
-      className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 font-semibold transition duration-300 rounded-md"
-    >
-      Continuar
-    </button>
-  </div>
-</form>
-
+          <div className="flex flex-col items-start border rounded-lg overflow-hidden shadow-md p-4">
+            <input
+              type="text"
+              placeholder="Número de Celular"
+              value={phoneNumber}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md"
+              maxLength={10} 
+            />
+            <button
+              type="submit"
+              className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 font-semibold transition duration-300 rounded-md"
+            >
+              Continuar
+            </button>
+          </div>
+        </form>
         <p className="text-center text-sm text-gray-700 mt-6">
           Te enviaremos un código de verificación a tu{' '}
           <b className="text-black">CELULAR</b> para confirmar tu identidad.
