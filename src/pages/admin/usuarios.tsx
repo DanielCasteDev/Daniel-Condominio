@@ -10,7 +10,7 @@ const Usuarios: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 6;
   const [users, setUsers] = useState([
-    { id: 1, name: 'Juan Pérez', email: 'juan@correo.com', phone: '555-1234', profile: 'Admin', department: 'Ventas', tower: 'A' },
+    { id: 1, name: 'Juan Perez', email: 'juan@correo.com', phone: '555-1234', profile: 'Admin', department: 'Ventas', tower: 'A' },
     { id: 2, name: 'María López', email: 'maria@correo.com', phone: '555-5678', profile: 'Usuario', department: 'Soporte', tower: 'B' },
     { id: 3, name: 'Carlos García', email: 'carlos@correo.com', phone: '555-9876', profile: 'Admin', department: 'Marketing', tower: 'C' },
     { id: 4, name: 'Ana Torres', email: 'ana@correo.com', phone: '555-4321', profile: 'Usuario', department: 'Recursos Humanos', tower: 'D' },
