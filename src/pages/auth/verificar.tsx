@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.jpg';
 import logo from '/logoceleste.png'; 
 
@@ -68,7 +68,6 @@ const Verificar: React.FC = () => {
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${fondoImage})` }}
     >
-      <Toaster position="top-center" />
       <div className="bg-white bg-opacity-80 rounded-lg p-8 w-11/12 sm:w-1/2 md:w-1/3 shadow-xl">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="h-16" />

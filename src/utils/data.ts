@@ -1,3 +1,6 @@
+
+import { API_BASE_URL } from '../services/apiService';
+
 export const getPermisosData = () => {
     return [
       { id: 1, usuario: 'Juan Pérez', nombreCompleto: 'Juan Pérez', departamento: 'HR', torre: 'A', permisos: 'Admin' },
@@ -34,23 +37,39 @@ export const getPermisosData = () => {
     ];
   };
   
-  export const getMultasData = () => {
-    return [
-      { id: 1, usuario: 'Juan Pérez', nombreCompleto: 'Juan Pérez', departamento: 'HR', torre: 'A', multa: '$50 por acceso no autorizado' },
-      { id: 2, usuario: 'Ana Gómez', nombreCompleto: 'Ana Gómez', departamento: 'IT', torre: 'B', multa: '$30 por estacionamiento indebido' },
-      { id: 3, usuario: 'Luis García', nombreCompleto: 'Luis García', departamento: 'Marketing', torre: 'C', multa: '$100 por uso indebido de recursos' },
-      { id: 4, usuario: 'Carla Torres', nombreCompleto: 'Carla Torres', departamento: 'Finanzas', torre: 'A', multa: '$20 por retraso en reportes' },
-      { id: 5, usuario: 'Miguel Sánchez', nombreCompleto: 'Miguel Sánchez', departamento: 'Ventas', torre: 'B', multa: '$75 por incumplimiento de normas' },
-      { id: 6, usuario: 'Sofía Ramírez', nombreCompleto: 'Sofía Ramírez', departamento: 'Legal', torre: 'C', multa: '$15 por pérdida de material' },
-      { id: 7, usuario: 'Pablo Ortega', nombreCompleto: 'Pablo Ortega', departamento: 'Operaciones', torre: 'A', multa: '$40 por incumplimiento de horarios' },
-      { id: 8, usuario: 'Camila Fernández', nombreCompleto: 'Camila Fernández', departamento: 'Logística', torre: 'B', multa: '$55 por violación de políticas' },
-      { id: 9, usuario: 'José Ruiz', nombreCompleto: 'José Ruiz', departamento: 'Marketing', torre: 'C', multa: '$60 por uso indebido de espacios' },
-      { id: 10, usuario: 'Daniela López', nombreCompleto: 'Daniela López', departamento: 'Compras', torre: 'A', multa: '$25 por documentos extraviados' },
-      { id: 11, usuario: 'Raúl Torres', nombreCompleto: 'Raúl Torres', departamento: 'Finanzas', torre: 'B', multa: '$45 por mal uso de recursos' },
-      { id: 12, usuario: 'Lucía Sánchez', nombreCompleto: 'Lucía Sánchez', departamento: 'Ventas', torre: 'C', multa: '$80 por falta de inventario' },
-      { id: 13, usuario: 'Tomás Méndez', nombreCompleto: 'Tomás Méndez', departamento: 'RRHH', torre: 'A', multa: '$10 por retraso en pagos' },
-    ];
+  export const getMultasData = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/obtener_multas`);
+      if (!response.ok) {
+        throw new Error('No se pudo obtener las multas');
+      }
+      const data = await response.json();
+  
+      // Verificar si data es un arreglo antes de hacer el map
+      if (Array.isArray(data)) {
+        return data.map((multa, index) => ({
+          id: index + 1,
+          usuario: multa.usuario,
+          nombreCompleto: multa.nombreCompleto,
+          departamento: multa.departamento,
+          torre: multa.torre,
+          multa: multa.multa,
+          descripcion: multa.descripcion,
+          fechamulta: multa.fechamulta,
+
+        }));
+      } else {
+        console.error('Los datos no son un arreglo válido:', data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error al obtener las multas:', error);
+      alert('Hubo un error al obtener las multas. Intenta nuevamente.');
+      return [];
+    }
   };
+  
+
   export const getPagosData = () => {
     return [
       { id: 1, usuario: 'Juan Pérez', nombreCompleto: 'Juan Pérez', monto: 1000, fechaPago: '2025-01-15', estadoPago: 'Pagado', metodoPago: 'Tarjeta' },

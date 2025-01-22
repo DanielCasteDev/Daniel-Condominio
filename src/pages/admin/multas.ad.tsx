@@ -3,6 +3,8 @@ import Navbar from '../../components/navbar.ad';
 import Modal from '../../components/modal';
 import Table from '../../components/table';
 import { getMultasData } from '../../utils/data';
+import {saveMulta} from '../../utils/multas';
+import { toast } from 'sonner';
 
 const Multas: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,6 +18,9 @@ const Multas: React.FC = () => {
     { name: 'departamento', label: 'Departamento', type: 'text' },
     { name: 'torre', label: 'Torre', type: 'text' },
     { name: 'multa', label: 'Multa', type: 'number' },
+    { name: 'descripcion', label: 'Descripcion', type: 'text' },
+    { name: 'fechamulta', label: 'Fecha', type: 'date' },
+
   ];
 
   useEffect(() => {
@@ -41,16 +46,22 @@ const Multas: React.FC = () => {
   };
 
   const handleSaveMulta = async (formData: any) => {
-    if (formData.id) {
-      console.log('Actualizando multa:', formData);
-    } else {
-      console.log('Registrando nueva multa:', formData);
+    try {
+      await saveMulta(formData); // Guarda la multa en la base de datos
+      const updatedData = await getMultasData(); // Obtiene los datos actualizados
+      setMultasData(updatedData);
+      setShowModal(false); // Cierra el modal
+      
+      // Mostrar mensaje de éxito
+      toast.success('¡Multa registrada correctamente!');
+    } catch (error) {
+      console.error('Error al guardar la multa:', error);
+  
+      // Mostrar mensaje de error
+      toast.error('Hubo un problema al guardar la multa. Por favor, inténtalo de nuevo.');
     }
-
-    const updatedData = await getMultasData();
-    setMultasData(updatedData);
-    setShowModal(false);
   };
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -64,6 +75,9 @@ const Multas: React.FC = () => {
     { header: 'Departamento', accessor: 'departamento' },
     { header: 'Torre', accessor: 'torre' },
     { header: 'Multa', accessor: 'multa' },
+    { header: 'Descripcion', accessor: 'descripcion' },
+    { header: 'Fecha', accessor: 'fechamulta' },
+
   ];
 
   return (
