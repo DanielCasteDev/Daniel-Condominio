@@ -5,7 +5,7 @@ import { HomeIcon, UserIcon, CurrencyDollarIcon, LockClosedIcon, DocumentTextIco
 // Asegúrate de tener un logo en la carpeta pública o en una ruta accesible
 import Logo from '/logoceleste.png';  // Actualiza con la ruta correcta de tu logo
 
-const Navbar: React.FC = () => {
+const NavbarUsr: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         <ul className="space-y-4">
           <li>
             <Link
-              to="/dashboard"
+              to="/DashboardUsr"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <HomeIcon className="h-6 w-6 mr-4" />
@@ -36,16 +36,16 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/Usuarios"
+              to="/Notificaciones"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <UserIcon className="h-6 w-6 mr-4" />
-              Usuarios
+              Notificaciones
             </Link>
           </li>
           <li>
             <Link
-              to="/MultasAd"
+              to="/Multas"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <DocumentTextIcon className="h-6 w-6 mr-4" />
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/PermisosAd"
+              to="/Permisos"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <LockClosedIcon className="h-6 w-6 mr-4" />
@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/PagosAd"
+              to="/Pagos"
               className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
             >
               <CurrencyDollarIcon className="h-6 w-6 mr-4" />
@@ -94,4 +94,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default NavbarUsr;

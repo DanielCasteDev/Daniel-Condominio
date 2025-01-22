@@ -13,7 +13,7 @@ interface TableProps {
   onDelete: (id: number) => void;
 }
 
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 8;
 
 const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,8 +24,11 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
   const filteredData = data.filter(
     (item) =>
       item.id.toString().includes(searchQuery) ||
-      item.nombreCompleto.toLowerCase().includes(searchQuery.toLowerCase())
+      item.nombreCompleto?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) // Agregar el filtro por `name`
   );
+  
+  
 
   const paginatedData = filteredData.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -54,7 +57,6 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
     }
     return baseClass; // Para otros estados
   };
-  
 
   return (
     <div>
@@ -71,24 +73,23 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
         </div>
       </div>
 
+      {/* Contenedor responsive */}
       <div className="overflow-x-auto w-full">
         <table className="min-w-full table-auto text-sm">
           <thead className="bg-gray-200 text-gray-700">
             <tr>
               {columns.map((col, index) => (
-                <th key={index} className="px-6 py-4 text-left">
-                  {col.header}
-                </th>
+                <th key={index} className="px-4 py-2 text-left">{col.header}</th>
               ))}
-              <th className="px-6 py-4 text-left">Acciones</th>
+              <th className="px-4 py-2 text-left">Acciones</th>
             </tr>
           </thead>
-          <tbody className="bg-white ">
+          <tbody className="bg-white">
             {paginatedData.length > 0 ? (
               paginatedData.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200 hover:bg-gray-50 ">
+                <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                   {columns.map((col, colIndex) => (
-                    <td key={colIndex} className="px-6 py-4 ">
+                    <td key={colIndex} className="px-4 py-2 whitespace-nowrap">
                       {col.accessor === 'estadoPago' ? (
                         <span className={getEstadoPagoClass(item[col.accessor])}>
                           {item[col.accessor]}
@@ -98,7 +99,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
                       )}
                     </td>
                   ))}
-                  <td className="px-6 py-4 flex space-x-4">
+                  <td className="px-4 py-2 flex justify-center space-x-2">
                     <button
                       onClick={() => onEdit(item)}
                       className="text-blue-500 hover:text-blue-700"
@@ -116,7 +117,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={columns.length + 1} className="px-4 py-4 text-center text-gray-500">
                   No se encontraron datos
                 </td>
               </tr>
@@ -125,6 +126,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
         </table>
       </div>
 
+      {/* Paginación */}
       <div className="flex justify-center items-center mt-4">
         <button
           onClick={handlePrevious}

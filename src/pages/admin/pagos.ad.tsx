@@ -3,6 +3,7 @@ import Navbar from '../../components/navbar.ad';
 import Modal from '../../components/modal';
 import Table from '../../components/table';
 import { getPagosData } from '../../utils/data'; // Aquí modificamos la función para obtener datos de pagos.
+import NavbarSuperior from '../../components/navbar.superior';
 
 const Pagos: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -72,30 +73,36 @@ const Pagos: React.FC = () => {
   return (
     <>
       <div className="flex h-screen bg-gray-100">
+        {/* Navbar lateral */}
         <Navbar />
-
-        <div className="flex-grow p-10">
-          <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-yellow-300">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Pagos Realizados</h2>
-              <button
-                onClick={handleNewPago}
-                className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
-              >
-                Registrar Pago
-              </button>
+  
+        <div className="flex flex-col flex-grow">
+          {/* Navbar superior */}
+          <NavbarSuperior />
+  
+          <div className="flex-grow p-10">
+            <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-yellow-300">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Pagos Realizados</h2>
+                <button
+                  onClick={handleNewPago}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                >
+                  Registrar Pago
+                </button>
+              </div>
+  
+              <Table
+                columns={columns}
+                data={pagosData}
+                onEdit={handleEditPago}
+                onDelete={handleDeletePago}
+              />
             </div>
-
-            <Table
-              columns={columns}
-              data={pagosData}
-              onEdit={handleEditPago}
-              onDelete={handleDeletePago}
-            />
           </div>
         </div>
       </div>
-
+  
       {showModal && (
         <Modal
           showModal={showModal}
@@ -108,6 +115,7 @@ const Pagos: React.FC = () => {
       )}
     </>
   );
+  
 };
 
 export default Pagos;

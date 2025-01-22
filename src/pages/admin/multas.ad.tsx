@@ -5,23 +5,20 @@ import Table from '../../components/table';
 import { getMultasData } from '../../utils/data';
 import {saveMulta} from '../../utils/multas';
 import { toast } from 'sonner';
+import NavbarSuperior from '../../components/navbar.superior';
 
 const Multas: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedMulta, setSelectedMulta] = useState<any | null>(null);
   const [multasData, setMultasData] = useState<any[]>([]);
 
-  // Configuración de campos para el modal
   const fields = [
-    { name: 'usuario', label: 'Usuario', type: 'text' },
-    { name: 'nombreCompleto', label: 'Nombre Completo', type: 'text' },
-    { name: 'departamento', label: 'Departamento', type: 'text' },
-    { name: 'torre', label: 'Torre', type: 'text' },
-    { name: 'multa', label: 'Multa', type: 'number' },
-    { name: 'descripcion', label: 'Descripcion', type: 'text' },
+    { name: 'descripcion', label: 'Descripción', type: 'text' },
     { name: 'fechamulta', label: 'Fecha', type: 'date' },
-
+    { name: 'departamento', label: 'Departamento', type: 'text' },
+    { name: 'multa', label: 'Multa', type: 'text' },  // Campo para la multa
   ];
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,23 +41,23 @@ const Multas: React.FC = () => {
   const handleDeleteMulta = (multaId: number) => {
     alert(`Multa con ID ${multaId} eliminada`);
   };
-
   const handleSaveMulta = async (formData: any) => {
     try {
-      await saveMulta(formData); // Guarda la multa en la base de datos
-      const updatedData = await getMultasData(); // Obtiene los datos actualizados
-      setMultasData(updatedData);
-      setShowModal(false); // Cierra el modal
+      await saveMulta(formData); // Llamada para guardar la multa, con todos los campos incluidos (descripcion, fechamulta, departamento, multa)
       
-      // Mostrar mensaje de éxito
-      toast.success('¡Multa registrada correctamente!');
+      // Obtener los datos actualizados después de guardar la nueva multa
+      const updatedData = await getMultasData();
+      setMultasData(updatedData); // Actualizar los datos de las multas en el estado
+      
+      setShowModal(false); // Cierra el modal después de guardar la multa
+      
+      toast.success('¡Multa registrada correctamente!'); // Mostrar notificación de éxito
     } catch (error) {
       console.error('Error al guardar la multa:', error);
-  
-      // Mostrar mensaje de error
-      toast.error('Hubo un problema al guardar la multa. Por favor, inténtalo de nuevo.');
+      toast.error('Hubo un problema al guardar la multa. Por favor, inténtalo de nuevo.'); // Notificación de error
     }
   };
+  
   
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -70,39 +67,45 @@ const Multas: React.FC = () => {
 
   const columns = [
     { header: 'ID', accessor: 'id' },
-    { header: 'Usuario', accessor: 'usuario' },
-    { header: 'Nombre Completo', accessor: 'nombreCompleto' },
+    { header: 'Usuario', accessor: 'usuario' }, // Accede directamente al campo usuario (nombre)
     { header: 'Departamento', accessor: 'departamento' },
     { header: 'Torre', accessor: 'torre' },
     { header: 'Multa', accessor: 'multa' },
     { header: 'Descripcion', accessor: 'descripcion' },
     { header: 'Fecha', accessor: 'fechamulta' },
-
   ];
+  
+  
 
   return (
     <>
       <div className="flex h-screen bg-gray-100">
+        {/* Navbar lateral */}
         <Navbar />
 
-        <div className="flex-grow p-10">
-          <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-red-300">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Multas de los Portones</h2>
-              <button
-                onClick={handleNewMulta}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-              >
-                Registrar Multa
-              </button>
-            </div>
+        <div className="flex flex-col flex-grow">
+          {/* Navbar superior */}
+          <NavbarSuperior />
 
-            <Table
-              columns={columns}
-              data={multasData}
-              onEdit={handleEditMulta}
-              onDelete={handleDeleteMulta}
-            />
+          <div className="flex-grow p-10">
+            <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-red-300">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Multas de los Portones</h2>
+                <button
+                  onClick={handleNewMulta}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                >
+                  Registrar Multa
+                </button>
+              </div>
+
+              <Table
+                columns={columns}
+                data={multasData}
+                onEdit={handleEditMulta}
+                onDelete={handleDeleteMulta}
+              />
+            </div>
           </div>
         </div>
       </div>

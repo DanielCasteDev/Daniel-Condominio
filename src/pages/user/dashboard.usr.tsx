@@ -1,12 +1,12 @@
 import React from 'react';
-import Navbar from '../../components/navbar.ad';
+import NavbarUsr from '../../components/navbar';
 import NavbarSuperior from '../../components/navbar.superior';
 
-const Dashboard: React.FC = () => {
+const DashboardUsr: React.FC = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar (Navbar) */}
-      <Navbar />
+      <NavbarUsr />
 
       {/* Contenedor principal */}
       <div className="flex-grow flex flex-col">
@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <h1 className="text-3xl font-semibold text-gray-900">Bienvenido al Dashboard</h1>
             <p className="mt-4 text-lg text-gray-600">
-              Este es el panel de administración, donde puedes gestionar todos los aspectos de la plataforma.
+              Este es el panel de Usuario, donde puedes gestionar todos los aspectos de la plataforma.
             </p>
           </div>
 
@@ -32,4 +32,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardUsr;

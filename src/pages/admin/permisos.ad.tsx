@@ -3,6 +3,7 @@ import Navbar from '../../components/navbar.ad';
 import Modal from '../../components/modal';
 import Table from '../../components/table';
 import { getPermisosData } from '../../utils/data';
+import NavbarSuperior from '../../components/navbar.superior';
 
 const Permisos: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -68,30 +69,36 @@ const Permisos: React.FC = () => {
   return (
     <>
       <div className="flex h-screen bg-gray-100">
+        {/* Navbar lateral */}
         <Navbar />
-
-        <div className="flex-grow p-10">
-          <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-green-300">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Permisos de los Portones</h2>
-              <button
-                onClick={handleNewPermiso}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-              >
-                Registrar Permiso
-              </button>
+  
+        <div className="flex flex-col flex-grow">
+          {/* Navbar superior */}
+          <NavbarSuperior />
+  
+          <div className="flex-grow p-10">
+            <div className="bg-white p-8 rounded-lg shadow-xl border-t-4 border-green-300">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Permisos de los Portones</h2>
+                <button
+                  onClick={handleNewPermiso}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                >
+                  Registrar Permiso
+                </button>
+              </div>
+  
+              <Table
+                columns={columns}
+                data={permisosData}
+                onEdit={handleEditPermiso}
+                onDelete={handleDeletePermiso}
+              />
             </div>
-
-            <Table
-              columns={columns}
-              data={permisosData}
-              onEdit={handleEditPermiso}
-              onDelete={handleDeletePermiso}
-            />
           </div>
         </div>
       </div>
-
+  
       {showModal && (
         <Modal
           showModal={showModal}
@@ -104,6 +111,7 @@ const Permisos: React.FC = () => {
       )}
     </>
   );
+  
 };
 
 export default Permisos;

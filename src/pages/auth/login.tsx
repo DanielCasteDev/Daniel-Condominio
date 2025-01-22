@@ -2,20 +2,41 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.jpg';
+import { loginUser } from '../../utils/data'; // Importar la función loginUser
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    toast.success('Número correcto. Redirigiendo...', {
-      duration: 2000,
-    });
-    setTimeout(() => {
-      navigate('/Verificar');
-    }, 2000);
+    try {
+      // Llamar a la función loginUser desde utils/data.ts
+      const { name, profile } = await loginUser(phoneNumber);
+
+      // Guardar los datos en localStorage
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userProfile', profile);
+
+      toast.success('Número correcto. Redirigiendo...', {
+        duration: 2000,
+      });
+
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        // Verificar el perfil del usuario y redirigir en consecuencia
+        if (profile === 'superadmin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/DashboardUsr');
+        }
+      }, 2000);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Error al iniciar sesión', {
+        duration: 3000,
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +77,7 @@ const Login: React.FC = () => {
               value={phoneNumber}
               onChange={handleInputChange}
               className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md"
-              maxLength={10} 
+              maxLength={10}
             />
             <button
               type="submit"

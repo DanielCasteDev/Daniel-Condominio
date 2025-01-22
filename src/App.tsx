@@ -8,9 +8,15 @@ import Usuarios from './pages/admin/usuarios';
 import PagosAd from './pages/admin/pagos.ad';
 import MultasAd from './pages/admin/multas.ad';
 import PermisosAd from './pages/admin/permisos.ad';
+import DashboardUsr from './pages/user/dashboard.usr';
+import Multas from './pages/user/multas';
+import Pagos from './pages/user/pagos';
+import Permisos from './pages/user/permisos';
+import Notificaciones from './pages/user/notificaciones';
 
 const App: React.FC = () => {
   return (
+
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -20,9 +26,15 @@ const App: React.FC = () => {
         <Route path="/PagosAd" element={<PagosAd />} />
         <Route path="/MultasAd" element={<MultasAd />} />
         <Route path="/PermisosAd" element={<PermisosAd />} />
+        <Route path="/DashboardUsr" element={<DashboardUsr />} />
+        <Route path="/Multas" element={<Multas />} />
+        <Route path="/Permisos" element={<Permisos />} />
+        <Route path="/Pagos" element={<Pagos />} />
+        <Route path="/Notificaciones" element={<Notificaciones />} />
+
       </Routes>
       
-      <Toaster /> {/* Aquí colocas el Toaster para que funcione en todas las rutas */}
+      <Toaster />
     </Router>
   );
 };
