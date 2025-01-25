@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HomeIcon, UserIcon, CurrencyDollarIcon, LockClosedIcon, DocumentTextIcon, PowerIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, CurrencyDollarIcon, LockClosedIcon, DocumentTextIcon, PowerIcon } from '@heroicons/react/24/outline';
 
 // Asegúrate de tener un logo en la carpeta pública o en una ruta accesible
 import Logo from '/logoceleste.png';  // Actualiza con la ruta correcta de tu logo
@@ -34,15 +34,7 @@ const NavbarUsr: React.FC = () => {
               Inicio
             </Link>
           </li>
-          <li>
-            <Link
-              to="/Notificaciones"
-              className="flex items-center px-4 py-2 hover:bg-gray-700 hover:text-white transition-colors rounded-lg"
-            >
-              <UserIcon className="h-6 w-6 mr-4" />
-              Notificaciones
-            </Link>
-          </li>
+        
           <li>
             <Link
               to="/Multas"

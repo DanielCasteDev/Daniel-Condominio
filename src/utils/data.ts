@@ -1,9 +1,6 @@
 import { API_BASE_URL } from '../services/apiService';
 
-interface LoginResponse {
-  name: string;
-  profile: string;
-}
+
 
 interface Multa {
   id: string; // Puedes usar otro tipo, dependiendo de la estructura de la base de datos
@@ -21,6 +18,12 @@ interface Usuario {
 }
 
 
+export interface LoginResponse {
+  name: string;
+  profile: string;
+  department: string; // Cambié 'departament' por 'department', ya que en tu base de datos es 'department'
+}
+
 export const loginUser = async (phone: string): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_BASE_URL}/login`, {
@@ -37,11 +40,15 @@ export const loginUser = async (phone: string): Promise<LoginResponse> => {
     }
 
     const data = await response.json();
-    return data; // Devuelve los datos del usuario
+
+    console.log('Datos recibidos de la API:', data);  // Verifica que 'department' sea un número o cadena válida
+
+    return data; // Devuelve los datos del usuario, incluyendo department
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : 'Error de conexión');
   }
 };
+
 
 export const getPermisosData = () => {
   return [
@@ -172,4 +179,53 @@ export const getMultasData = async (): Promise<any[]> => {
     ];
   };
   
-  
+  // utils/data.ts
+export interface Notificacion {
+  descripcion: string;
+  fechamulta: string;
+  departamento: string;
+  multa: string;
+}
+
+
+export const obtenerNotificaciones = async (): Promise<Notificacion[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/notificaciones`, {
+      method: 'GET', // Usamos GET ya que estamos trayendo datos
+      headers: {
+        'Content-Type': 'application/json',
+        // Agregar token o autorización si es necesario
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Error al obtener las notificaciones');
+    }
+
+    const data = await response.json();
+    return data; // Suponemos que la respuesta es un array de notificaciones
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : 'Error de conexión');
+  }
+};
+
+export const borrarNotificacionesPorDepartamento = async (departamento: string): Promise<void> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/notificaciones`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        // Agregar token o autorización si es necesario
+      },
+      body: JSON.stringify({ departamento }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Error al borrar las notificaciones');
+    }
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : 'Error de conexión');
+  }
+};

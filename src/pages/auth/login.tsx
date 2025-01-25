@@ -10,22 +10,24 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
-      // Llamar a la función loginUser desde utils/data.ts
-      const { name, profile } = await loginUser(phoneNumber);
-
+      // Llamar a la función loginUser
+      const { name, profile, department } = await loginUser(phoneNumber);
+  
+      console.log('Datos recibidos de la API:', { name, profile, department });  // Verifica aquí los datos recibidos
+  
       // Guardar los datos en localStorage
       localStorage.setItem('userName', name);
       localStorage.setItem('userProfile', profile);
-
+      localStorage.setItem('userDepartment', department);  // Guarda 'department' correctamente
+  
       toast.success('Número correcto. Redirigiendo...', {
         duration: 2000,
       });
-
+  
       // Redirigir después de 2 segundos
       setTimeout(() => {
-        // Verificar el perfil del usuario y redirigir en consecuencia
         if (profile === 'superadmin') {
           navigate('/dashboard');
         } else {
@@ -38,7 +40,7 @@ const Login: React.FC = () => {
       });
     }
   };
-
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {

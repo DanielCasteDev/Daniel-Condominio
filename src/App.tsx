@@ -12,7 +12,6 @@ import DashboardUsr from './pages/user/dashboard.usr';
 import Multas from './pages/user/multas';
 import Pagos from './pages/user/pagos';
 import Permisos from './pages/user/permisos';
-import Notificaciones from './pages/user/notificaciones';
 
 const App: React.FC = () => {
   return (
@@ -30,7 +29,6 @@ const App: React.FC = () => {
         <Route path="/Multas" element={<Multas />} />
         <Route path="/Permisos" element={<Permisos />} />
         <Route path="/Pagos" element={<Pagos />} />
-        <Route path="/Notificaciones" element={<Notificaciones />} />
 
       </Routes>
       
