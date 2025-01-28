@@ -14,7 +14,7 @@ interface Usuario {
   name: string;
   department: string;
   tower: string;
-  multas: Multa[]; // Un usuario tiene un arreglo de multas
+  multas: Multa[]; 
 }
 
 
@@ -24,14 +24,14 @@ export interface LoginResponse {
   department: string; // Cambié 'departament' por 'department', ya que en tu base de datos es 'department'
 }
 
-export const loginUser = async (phone: string): Promise<LoginResponse> => {
+export const loginUser = async (phone: string, password: string): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ phone }),
+      body: JSON.stringify({ phone, password }), // Envía tanto el teléfono como la contraseña
     });
 
     if (!response.ok) {
@@ -43,12 +43,11 @@ export const loginUser = async (phone: string): Promise<LoginResponse> => {
 
     console.log('Datos recibidos de la API:', data);  // Verifica que 'department' sea un número o cadena válida
 
-    return data; // Devuelve los datos del usuario, incluyendo department
+    return data.user; // Devuelve los datos del usuario, incluyendo department
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : 'Error de conexión');
   }
 };
-
 
 export const getPermisosData = () => {
   return [
@@ -90,6 +89,7 @@ export const getUsuariosData = async () => {
         profile: usuario.profile,
         department: usuario.department,
         tower: usuario.tower,
+
       }));
     } else {
       // Si no es un arreglo, muestra el contenido de los datos

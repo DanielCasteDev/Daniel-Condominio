@@ -15,6 +15,7 @@ const Usuarios: React.FC = () => {
   // Configuración de campos para el modal
   const fields = [
     { name: 'name', label: 'Nombre', type: 'text' },
+    { name: 'password', label: 'Contraseña', type: 'password' },
     { name: 'email', label: 'Correo Electrónico', type: 'email' },
     { name: 'phone', label: 'Número Celular', type: 'text' },
     { name: 'profile', label: 'Perfil', type: 'select' },
@@ -80,6 +81,7 @@ const Usuarios: React.FC = () => {
     { header: 'Perfil', accessor: 'profile' },
     { header: 'Departamento', accessor: 'department' },
     { header: 'Torre', accessor: 'tower' },
+
   ];
 
   return (

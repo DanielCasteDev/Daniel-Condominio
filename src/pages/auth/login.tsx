@@ -7,25 +7,26 @@ import { loginUser } from '../../utils/data'; // Importar la función loginUser
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState(''); // Nuevo estado para la contraseña
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
-      // Llamar a la función loginUser
-      const { name, profile, department } = await loginUser(phoneNumber);
-  
-      console.log('Datos recibidos de la API:', { name, profile, department });  // Verifica aquí los datos recibidos
-  
+      // Llamar a la función loginUser con phoneNumber y password
+      const { name, profile, department } = await loginUser(phoneNumber, password);
+
+      console.log('Datos recibidos de la API:', { name, profile, department }); // Verifica los datos recibidos
+
       // Guardar los datos en localStorage
       localStorage.setItem('userName', name);
       localStorage.setItem('userProfile', profile);
-      localStorage.setItem('userDepartment', department);  // Guarda 'department' correctamente
-  
-      toast.success('Número correcto. Redirigiendo...', {
+      localStorage.setItem('userDepartment', department); // Guarda 'department' correctamente
+
+      toast.success('Inicio de sesión exitoso. Redirigiendo...', {
         duration: 2000,
       });
-  
+
       // Redirigir después de 2 segundos
       setTimeout(() => {
         if (profile === 'superadmin') {
@@ -40,12 +41,16 @@ const Login: React.FC = () => {
       });
     }
   };
-  
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
       setPhoneNumber(value);
     }
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value); // Actualiza el estado de la contraseña
   };
 
   return (
@@ -77,9 +82,16 @@ const Login: React.FC = () => {
               type="text"
               placeholder="Número de Celular"
               value={phoneNumber}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md"
+              onChange={handlePhoneChange}
+              className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md mb-4"
               maxLength={10}
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={handlePasswordChange}
+              className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md mb-4"
             />
             <button
               type="submit"
