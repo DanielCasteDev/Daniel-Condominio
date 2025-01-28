@@ -20,11 +20,14 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <>
       {showModal && (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 p-8">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-full sm:max-w-sm md:max-w-md lg:max-w-3xl xl:max-w-3xl">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 p-8">
+          <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-2xl">
+            {/* Título del modal */}
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               {formData?.id ? 'Editar Registro' : 'Registrar Nuevo'}
             </h3>
+
+            {/* Formulario */}
             <form
               onSubmit={(e: FormEvent) => {
                 e.preventDefault();
@@ -36,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({
                   // Configuración dinámica de campos
                   fields.map(({ name, label, type }) => (
                     <div key={name} className="mb-4">
-                      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+                      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
                         {label}
                       </label>
                       {type === 'select' ? (
@@ -45,7 +48,7 @@ const Modal: React.FC<ModalProps> = ({
                           name={name}
                           value={formData?.[name] || ''}
                           onChange={onInputChange}
-                          className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">Seleccione un perfil</option>
                           <option value="admin">Admin</option>
@@ -59,7 +62,7 @@ const Modal: React.FC<ModalProps> = ({
                           name={name}
                           value={formData?.[name] || ''}
                           onChange={onInputChange}
-                          className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       )}
                     </div>
@@ -68,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({
                   // Si no se pasan campos, usar un formulario predeterminado
                   <>
                     <div className="mb-4">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                       <input
                         id="name"
                         name="name"
@@ -76,12 +79,12 @@ const Modal: React.FC<ModalProps> = ({
                         value={formData.name || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
                       <input
                         id="email"
                         name="email"
@@ -89,12 +92,12 @@ const Modal: React.FC<ModalProps> = ({
                         value={formData.email || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Número Celular</label>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Número Celular</label>
                       <input
                         id="phone"
                         name="phone"
@@ -102,20 +105,19 @@ const Modal: React.FC<ModalProps> = ({
                         value={formData.phone || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
-                    {/* Campo para Perfil - select */}
                     <div className="mb-4">
-                      <label htmlFor="profile" className="block text-sm font-medium text-gray-700">Perfil</label>
+                      <label htmlFor="profile" className="block text-sm font-medium text-gray-700 mb-1">Perfil</label>
                       <select
                         id="profile"
                         name="profile"
                         value={formData.profile || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="">Seleccione un perfil</option>
                         <option value="admin">Admin</option>
@@ -124,9 +126,8 @@ const Modal: React.FC<ModalProps> = ({
                       </select>
                     </div>
 
-                    {/* Campos para el pago */}
                     <div className="mb-4">
-                      <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Monto</label>
+                      <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">Monto</label>
                       <input
                         id="amount"
                         name="amount"
@@ -134,12 +135,12 @@ const Modal: React.FC<ModalProps> = ({
                         value={formData.amount || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="payment_date" className="block text-sm font-medium text-gray-700">Fecha de Pago</label>
+                      <label htmlFor="payment_date" className="block text-sm font-medium text-gray-700 mb-1">Fecha de Pago</label>
                       <input
                         id="payment_date"
                         name="payment_date"
@@ -147,19 +148,19 @@ const Modal: React.FC<ModalProps> = ({
                         value={formData.payment_date || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="payment_method" className="block text-sm font-medium text-gray-700">Método de Pago</label>
+                      <label htmlFor="payment_method" className="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
                       <select
                         id="payment_method"
                         name="payment_method"
                         value={formData.payment_method || ''}
                         onChange={onInputChange}
                         required
-                        className="w-full mt-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="">Seleccione un método</option>
                         <option value="tarjeta">Tarjeta</option>
@@ -171,17 +172,18 @@ const Modal: React.FC<ModalProps> = ({
                 )}
               </div>
 
-              <div className="flex justify-between mt-6">
+              {/* Botones de acción */}
+              <div className="flex justify-end mt-6 space-x-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition-colors"
+                  className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                  className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   {formData?.id ? 'Guardar Cambios' : 'Registrar'}
                 </button>
