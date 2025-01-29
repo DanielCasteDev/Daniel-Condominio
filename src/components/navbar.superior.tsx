@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { BellIcon } from '@heroicons/react/24/outline';
 import { obtenerNotificaciones, Notificacion, borrarNotificacionesPorDepartamento } from '../utils/data';
 import Notis from '../components/notis';
+import Perfil from '../components/perfil';
 
 const SidebarNotificaciones: React.FC = () => {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const userDepartment = localStorage.getItem('userDepartment');
-  const userName = localStorage.getItem('userName') || 'Usuario';
   const userRole = localStorage.getItem('userProfile') || '';
 
   const fetchNotificaciones = useCallback(async () => {
@@ -54,7 +53,7 @@ const SidebarNotificaciones: React.FC = () => {
               className="relative flex items-center hover:text-gray-800 transition-all duration-300 ease-in-out"
               aria-label="Notificaciones"
             >
-              <BellIcon className="h-8 w-8 text-gray-500 hover:text-gray-700" />
+              <BellIcon className="h-10 w-10 text-gray-500 hover:text-gray-700" />
               {notificaciones.length > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transform translate-x-3 -translate-y-2">
                   {notificaciones.length}
@@ -62,14 +61,7 @@ const SidebarNotificaciones: React.FC = () => {
               )}
             </button>
           )}
-          <Link
-            to="/usuario"
-            className="flex items-center hover:text-gray-800 transition-all duration-300 ease-in-out"
-            aria-label="Perfil de usuario"
-          >
-            <UserCircleIcon className="h-8 w-8 text-gray-500 hover:text-gray-700" />
-            <span className="ml-2">{userName}</span>
-          </Link>
+          <Perfil /> {/* Usa el componente Perfil aquí */}
         </nav>
       </header>
 
