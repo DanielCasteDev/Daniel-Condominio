@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import fondoImage from '../../assets/fondo.jpg';
+import fondoImage from '../../assets/fondo.webp';
 import logo from '/logoceleste.png'; 
 
 const Verificar: React.FC = () => {

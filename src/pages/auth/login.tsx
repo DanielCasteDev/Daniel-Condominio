@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import fondoImage from '../../assets/fondo.jpg';
+import fondoImage from '../../assets/fondo.webp';
 import { loginUser } from '../../utils/data'; // Importar la función loginUser
 
 const Login: React.FC = () => {
