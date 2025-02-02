@@ -111,6 +111,8 @@ const Usuarios: React.FC = () => {
                 data={usuariosData}
                 onEdit={handleEditUsuario}
                 onDelete={handleDeleteUsuario}
+                showHistoryButton={false} // Ocultar el botón de historial
+
               />
             </div>
           </div>

@@ -2,20 +2,8 @@ import { API_BASE_URL } from '../services/apiService';
 
 
 
-interface Multa {
-  id: string; // Puedes usar otro tipo, dependiendo de la estructura de la base de datos
-  descripcion: string;
-  fechamulta: string; // Cambia el tipo según el formato real de la fecha
-  multa: string; // O puede ser un número, dependiendo de tu caso
-}
 
-interface Usuario {
-  id: string;
-  name: string;
-  department: string;
-  tower: string;
-  multas: Multa[]; 
-}
+
 
 
 export interface LoginResponse {
@@ -103,25 +91,39 @@ export const getUsuariosData = async () => {
   }
 };
 
+export const getHistorialMultas = async (departamento: string): Promise<any[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/obtener_historial_multas/${departamento}`);
+    if (!response.ok) {
+      throw new Error('No se pudo obtener el historial de multas');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener el historial de multas:', error);
+    throw error;
+  }
+};
 export const getMultasData = async (): Promise<any[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/obtener_multas_con_usuario?departamento=someDepartment`);
+    // Llamar a la nueva ruta para obtener la última multa de todos los usuarios
+    const response = await fetch(`${API_BASE_URL}/obtener_ultima_multa_todos`);
 
     if (!response.ok) {
-      throw new Error('No se pudo obtener las multas');
+      throw new Error('No se pudo obtener las últimas multas');
     }
 
     // Convertir la respuesta en JSON
-    const data: Usuario[] = await response.json();
+    const data = await response.json();
 
     console.log("Datos recibidos:", data);
 
     if (Array.isArray(data)) {
       return data.map((usuario, index) => {
-        // Si el usuario tiene multas, las mapeamos. Si no, mostramos una entrada vacía o un mensaje.
-        if (!Array.isArray(usuario.multas) || usuario.multas.length === 0) {
+        // Si el usuario no tiene multas, mostramos una entrada vacía o un mensaje
+        if (!usuario.ultimaMulta) {
           console.log(`El usuario ${usuario.name} no tiene multas.`);
-          
+
           // Retorna el usuario sin multas, con valores vacíos en las propiedades de multa
           return {
             id: `${index + 1}`,
@@ -135,30 +137,28 @@ export const getMultasData = async (): Promise<any[]> => {
           };
         }
 
-        // Si el usuario tiene multas, las mapeamos
-        return usuario.multas.map((multa, multaIndex) => ({
-          id: `${index + 1}-${multaIndex + 1}`, // Generar ID único basado en el índice del usuario y multa
-          usuario: usuario.name,  // Nombre del usuario
-          nombreCompleto: usuario.name, // Nombre completo del usuario
-          departamento: usuario.department, // Departamento del usuario
-          torre: usuario.tower, // Torre del usuario
-          multa: multa.multa, // Multa
-          descripcion: multa.descripcion, // Descripción de la multa
-          fechamulta: multa.fechamulta, // Fecha de la multa
-        }));
-      }).flat(); // Usamos flat() para aplanar el arreglo de multas
+        // Si el usuario tiene multas, devolvemos la última multa
+        return {
+          id: `${index + 1}`,
+          usuario: usuario.name,
+          nombreCompleto: usuario.name,
+          departamento: usuario.department,
+          torre: usuario.tower,
+          multa: usuario.ultimaMulta.multa,
+          descripcion: usuario.ultimaMulta.descripcion,
+          fechamulta: usuario.ultimaMulta.fechamulta,
+        };
+      });
     } else {
       console.error('Los datos no son un arreglo válido:', data);
       return [];
     }
   } catch (error) {
-    console.error('Error al obtener las multas:', error);
-    alert('Hubo un error al obtener las multas. Intenta nuevamente.');
+    console.error('Error al obtener las últimas multas:', error);
+    alert('Hubo un error al obtener las últimas multas. Intenta nuevamente.');
     return [];
   }
 };
-
-
   
 
   export const getPagosData = () => {

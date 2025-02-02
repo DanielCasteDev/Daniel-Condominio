@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PencilSquareIcon, TrashIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon, MagnifyingGlassIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface Column {
   header: string;
@@ -12,11 +12,20 @@ interface TableProps {
   data: any[];
   onEdit: (item: any) => void;
   onDelete: (id: number) => void;
+  onViewHistory?: (departamento: string) => void; // Nueva prop para manejar el historial (opcional)
+  showHistoryButton?: boolean; // Nueva prop para controlar la visibilidad del botón de historial
 }
 
 const ITEMS_PER_PAGE = 5;
 
-const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
+const Table: React.FC<TableProps> = ({
+  columns,
+  data,
+  onEdit,
+  onDelete,
+  onViewHistory,
+  showHistoryButton = true, // Por defecto, el botón de historial estará visible
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -127,6 +136,16 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
                     >
                       <TrashIcon className="w-5 h-5" />
                     </button>
+                    {/* Botón de historial (condicional) */}
+                    {showHistoryButton && onViewHistory && (
+                      <button
+                        onClick={() => onViewHistory(item.departamento)} // Pasar el departamento como parámetro
+                        className="text-green-500 hover:text-green-700 transition-colors duration-200"
+                        aria-label="Ver historial"
+                      >
+                        <ClockIcon className="w-5 h-5" />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
@@ -176,6 +195,16 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
+                  {/* Botón de historial (condicional) */}
+                  {showHistoryButton && onViewHistory && (
+                    <button
+                      onClick={() => onViewHistory(item.departamento)} // Pasar el departamento como parámetro
+                      className="text-green-500 hover:text-green-700 transition-colors duration-200"
+                      aria-label="Ver historial"
+                    >
+                      <ClockIcon className="w-5 h-5" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))
