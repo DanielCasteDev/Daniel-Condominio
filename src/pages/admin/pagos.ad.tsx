@@ -33,20 +33,16 @@ const Pagos: React.FC = () => {
     alert(`Pago con ID ${pagoId} eliminado`);
   };
 
-  const handleSavePago = (pago: any) => {
-    console.log('Pago guardado:', pago);
-
-    // Simula la actualización de datos
-    const updatedData = pagosData.map((p) =>
-      p.id === pago.id ? pago : p
-    );
-    setPagosData(updatedData);
-    setShowModal(false);
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setSelectedPago((prevPago: any) => ({ ...prevPago, [name]: value }));
+  };
+
+  const handleSavePago = async (data: any) => {
+    // Simula una operación asíncrona, como una llamada a una API
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log('Datos enviados:', data);
   };
 
   const columns = [

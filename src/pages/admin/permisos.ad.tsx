@@ -33,15 +33,10 @@ const Permisos: React.FC = () => {
     alert(`Permiso con ID ${permisoId} eliminado`);
   };
 
-  const handleSavePermiso = (permiso: any) => {
-    console.log('Permiso guardado:', permiso);
-
-    // Simula la actualización de datos
-    const updatedData = permisosData.map((p) =>
-      p.id === permiso.id ? permiso : p
-    );
-    setPermisosData(updatedData);
-    setShowModal(false);
+  const handleSavePermiso = async (data: any) => {
+    // Simula una operación asíncrona, como una llamada a una API
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log('Datos enviados:', data);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

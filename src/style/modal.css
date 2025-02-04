@@ -1,0 +1,72 @@
+/* Animación de entrada con efecto de carga */
+.modal-enter {
+    opacity: 0;
+  }
+  
+  .modal-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms;
+  }
+  
+  /* Animación de salida */
+  .modal-exit {
+    opacity: 1;
+  }
+  
+  .modal-exit-active {
+    opacity: 0;
+    transition: opacity 1000ms;
+  }
+  
+  /* Icono de carga */
+  .modal-loading::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Animación de giro */
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+  /* Estilos del contenedor del modal */
+  .modal-container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+  }
+  
+  /* Estilos del contenido del modal */
+  .modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 42rem;
+  }
+  
+  /* Estilos del título del modal */
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }

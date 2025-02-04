@@ -190,7 +190,7 @@ export interface Notificacion {
 
 export const obtenerNotificaciones = async (): Promise<Notificacion[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/notificaciones`, {
+    const response = await fetch(`${API_BASE_URL}/obtener_notificaciones`, {
       method: 'GET', // Usamos GET ya que estamos trayendo datos
       headers: {
         'Content-Type': 'application/json',

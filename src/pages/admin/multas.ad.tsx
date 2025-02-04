@@ -16,6 +16,15 @@ const Multas: React.FC = () => {
   const [showHistorialModal, setShowHistorialModal] = useState(false); // Estado para mostrar el modal de historial
   const [selectedDepartamento, setSelectedDepartamento] = useState<string>(''); // Estado para almacenar el departamento seleccionado
 
+  // Obtener la fecha actual en formato YYYY-MM-DD
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const fields = [
     { name: 'descripcion', label: 'Descripción', type: 'text' },
     { name: 'fechamulta', label: 'Fecha', type: 'date' },
@@ -125,6 +134,7 @@ const Multas: React.FC = () => {
           onSubmit={handleSaveMulta}
           onInputChange={handleInputChange}
           fields={fields}
+          maxDate={getCurrentDate()} // Pasar la fecha actual como fecha máxima
         />
       )}
 
