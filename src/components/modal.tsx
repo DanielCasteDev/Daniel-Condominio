@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import '../style/Modal.css'; // Archivo CSS para las animaciones
+import '../style/modal.css'; // Archivo CSS para las animaciones
 
 interface ModalProps {
   showModal: boolean;
