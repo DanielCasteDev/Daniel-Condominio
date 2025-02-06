@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/navbar.ad';
 import Modal from '../../components/modal';
 import Table from '../../components/table';
-import { getMultasData, getHistorialMultas } from '../../utils/data'; // Importar la función para obtener el historial
+import { getMultasData, getHistorialMultas, getUsuariosData } from '../../utils/data'; // Importar la función para obtener el historial y los usuarios
 import { saveMulta } from '../../utils/multas';
 import { toast } from 'sonner';
 import NavbarSuperior from '../../components/navbar.superior';
@@ -15,6 +15,7 @@ const Multas: React.FC = () => {
   const [historialData, setHistorialData] = useState<any[]>([]); // Estado para almacenar el historial
   const [showHistorialModal, setShowHistorialModal] = useState(false); // Estado para mostrar el modal de historial
   const [selectedDepartamento, setSelectedDepartamento] = useState<string>(''); // Estado para almacenar el departamento seleccionado
+  const [departamentos, setDepartamentos] = useState<string[]>([]); // Estado para almacenar la lista de departamentos
 
   // Obtener la fecha actual en formato YYYY-MM-DD
   const getCurrentDate = () => {
@@ -29,15 +30,33 @@ const Multas: React.FC = () => {
     { name: 'descripcion', label: 'Descripción', type: 'text' },
     { name: 'fechamulta', label: 'Fecha', type: 'date' },
     { name: 'departamento', label: 'Departamento', type: 'text' },
-    { name: 'multa', label: 'Multa', type: 'text' },
+    { name: 'multa', label: 'Monto', type: 'text' },
   ];
 
+  // Obtener los datos de multas y departamentos al cargar el componente
   useEffect(() => {
     const fetchData = async () => {
       const data = await getMultasData();
       setMultasData(data);
     };
     fetchData();
+  }, []);
+
+  // Obtener la lista de departamentos desde la base de datos
+  useEffect(() => {
+    const fetchDepartamentos = async () => {
+      try {
+        const usuarios = await getUsuariosData();
+        // Extraer los departamentos únicos de la lista de usuarios
+        const departamentosUnicos = [...new Set(usuarios.map(usuario => usuario.department))];
+        setDepartamentos(departamentosUnicos);
+      } catch (error) {
+        console.error('Error al obtener los departamentos:', error);
+        toast.error('Hubo un problema al obtener los departamentos. Por favor, inténtalo de nuevo.');
+      }
+    };
+
+    fetchDepartamentos();
   }, []);
 
   const handleNewMulta = () => {
@@ -130,11 +149,14 @@ const Multas: React.FC = () => {
         <Modal
           showModal={showModal}
           onClose={() => setShowModal(false)}
-          formData={selectedMulta}
+          formData={selectedMulta || {}}
           onSubmit={handleSaveMulta}
           onInputChange={handleInputChange}
           fields={fields}
-          maxDate={getCurrentDate()} // Pasar la fecha actual como fecha máxima
+          maxDate={getCurrentDate()}
+          title={selectedMulta?.id ? "Editar Multa" : "Registrar Multa"}
+          validateDepartamento={true} // Habilitar la validación del departamento
+          departamentos={departamentos} // Pasar la lista de departamentos
         />
       )}
 

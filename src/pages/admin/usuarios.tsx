@@ -18,7 +18,16 @@ const Usuarios: React.FC = () => {
     { name: 'password', label: 'Contraseña', type: 'password' },
     { name: 'email', label: 'Correo Electrónico', type: 'email' },
     { name: 'phone', label: 'Número Celular', type: 'text' },
-    { name: 'profile', label: 'Perfil', type: 'select' },
+    {
+      name: 'profile',
+      label: 'Perfil',
+      type: 'select',
+      options: [
+        { value: 'dueño', label: 'Dueño' },
+        { value: 'inquilino', label: 'Inquilino' },
+        { value: 'administracion', label: 'Administración' },
+      ],
+    },
     { name: 'department', label: 'Departamento', type: 'text' },
     { name: 'tower', label: 'Torre', type: 'text' },
   ];
@@ -49,13 +58,14 @@ const Usuarios: React.FC = () => {
     alert(`Usuario con ID ${usuarioId} eliminado`);
     // Aquí puedes manejar la lógica de eliminación si es necesario
   };
+
   const handleSaveUsuario = async (formData: any) => {
     try {
       // Eliminar el campo 'id' si existe, ya que MongoDB lo maneja automáticamente
       const { id, ...usuarioData } = formData;
-  
+
       console.log("Guardando usuario:", usuarioData); // Verifica los datos sin el id
-  
+
       await saveUsuario(usuarioData); // Asegúrate de enviar solo los campos necesarios
       const updatedData = await getUsuariosData();
       setUsuariosData(updatedData);
@@ -66,7 +76,6 @@ const Usuarios: React.FC = () => {
       toast.error('Hubo un problema al guardar el usuario.');
     }
   };
-  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -81,7 +90,6 @@ const Usuarios: React.FC = () => {
     { header: 'Perfil', accessor: 'profile' },
     { header: 'Departamento', accessor: 'department' },
     { header: 'Torre', accessor: 'tower' },
-
   ];
 
   return (
@@ -112,7 +120,6 @@ const Usuarios: React.FC = () => {
                 onEdit={handleEditUsuario}
                 onDelete={handleDeleteUsuario}
                 showHistoryButton={false} // Ocultar el botón de historial
-
               />
             </div>
           </div>
@@ -127,6 +134,7 @@ const Usuarios: React.FC = () => {
           onSubmit={handleSaveUsuario}
           onInputChange={handleInputChange}
           fields={fields} // Campos específicos para usuarios
+          title={selectedUsuario?.id ? "Editar Usuario" : "Registrar Usuario"}
         />
       )}
     </>

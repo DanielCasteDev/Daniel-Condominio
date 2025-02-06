@@ -5,11 +5,14 @@ import '../style/modal.css'; // Archivo CSS para las animaciones
 interface ModalProps {
   showModal: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>; // Debe manejar peticiones async
+  onSubmit: (data: any) => Promise<void>;
   formData: any;
   onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  fields?: { name: string; label: string; type: string }[];
-  maxDate?: string; // Nueva prop para la fecha máxima
+  fields?: { name: string; label: string; type: string; options?: { value: string; label: string }[] }[];
+  maxDate?: string;
+  title: string;
+  validateDepartamento?: boolean; // Nueva prop para habilitar la validación
+  departamentos?: string[]; // Lista de departamentos (opcional)
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -19,17 +22,26 @@ const Modal: React.FC<ModalProps> = ({
   formData,
   onInputChange,
   fields,
-  maxDate, // Recibir la fecha máxima como prop
+  maxDate,
+  title,
+  validateDepartamento = false, // Por defecto, la validación está deshabilitada
+  departamentos = [], // Por defecto, una lista vacía
 }) => {
   const nodeRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [departamentoError, setDepartamentoError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    await onSubmit(formData);
 
+    // Validar el departamento solo si validateDepartamento es true
+    if (validateDepartamento && !departamentos.includes(formData.departamento)) {
+      setDepartamentoError('El departamento no existe');
+      return;
+    }
+
+    setIsSubmitting(true);
+    await onSubmit(formData);
     setIsSubmitting(false);
     onClose();
   };
@@ -51,29 +63,50 @@ const Modal: React.FC<ModalProps> = ({
         <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-2xl relative">
           {isSubmitting && (
             <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 rounded-lg">
-              {/* Ícono de carga */}
               <div className="modal-loading"></div>
             </div>
           )}
 
           <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            {formData?.id ? 'Editar Registro' : 'Registrar Nuevo'}
+            {title}
           </h3>
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-              {fields?.map(({ name, label, type }) => (
+              {fields?.map(({ name, label, type, options }) => (
                 <div key={name} className="mb-4">
                   <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                  <input
-                    type={type}
-                    id={name}
-                    name={name}
-                    value={formData?.[name] || ''}
-                    onChange={onInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    max={type === 'date' ? maxDate : undefined} // Aplicar max solo para campos de tipo fecha
-                  />
+                  {type === 'select' ? (
+                    <select
+                      id={name}
+                      name={name}
+                      value={formData?.[name] || ''}
+                      onChange={onInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Seleccione una opción</option>
+                      {options?.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type={type}
+                      id={name}
+                      name={name}
+                      value={formData?.[name] || ''}
+                      onChange={onInputChange}
+                      className={`w-full px-4 py-2 border ${
+                        name === 'departamento' && departamentoError ? 'border-red-500' : 'border-gray-300'
+                      } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                      max={type === 'date' ? maxDate : undefined}
+                    />
+                  )}
+                  {name === 'departamento' && departamentoError && (
+                    <p className="text-red-500 text-sm mt-1">{departamentoError}</p>
+                  )}
                 </div>
               ))}
             </div>
