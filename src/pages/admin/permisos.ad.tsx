@@ -102,6 +102,8 @@ const Permisos: React.FC = () => {
           onSubmit={handleSavePermiso}
           onInputChange={handleInputChange}
           fields={fields}
+          title={selectedPermiso?.id ? "Editar Permiso" : "Registrar Permiso"}
+
         />
       )}
     </>

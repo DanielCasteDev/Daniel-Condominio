@@ -105,6 +105,7 @@ const Pagos: React.FC = () => {
           onClose={() => setShowModal(false)}
           formData={selectedPago}
           onSubmit={handleSavePago}
+          title={selectedPago?.id ? "Editar Pago" : "Registrar Pago"}
           onInputChange={handleInputChange}
           fields={fields}
         />
