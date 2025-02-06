@@ -109,7 +109,7 @@ const Multas: React.FC = () => {
     { header: 'Usuario', accessor: 'usuario' },
     { header: 'Departamento', accessor: 'departamento' },
     { header: 'Torre', accessor: 'torre' },
-    { header: 'Multa', accessor: 'multa' },
+    { header: 'Monto', accessor: 'multa' },
     { header: 'Descripcion', accessor: 'descripcion' },
     { header: 'Fecha', accessor: 'fechamulta' },
   ];
