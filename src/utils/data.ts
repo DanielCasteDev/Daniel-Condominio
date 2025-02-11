@@ -16,10 +16,8 @@ export const loginUser = async (phone: string, password: string): Promise<LoginR
   try {
     const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone, password }), // Envía tanto el teléfono como la contraseña
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password }),
     });
 
     if (!response.ok) {
@@ -28,10 +26,11 @@ export const loginUser = async (phone: string, password: string): Promise<LoginR
     }
 
     const data = await response.json();
+    
+    // Guarda el token en localStorage
+    localStorage.setItem('token', data.token);
 
-    console.log('Datos recibidos de la API:', data);  // Verifica que 'department' sea un número o cadena válida
-
-    return data.user; // Devuelve los datos del usuario, incluyendo department
+    return data.user;
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : 'Error de conexión');
   }
@@ -58,107 +57,96 @@ export const getPermisosData = () => {
   
 export const getUsuariosData = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/obtener_usuarios`);
-    
-    if (!response.ok) {
-      throw new Error('No se pudo obtener los usuarios');
-    }
-    
-    // Convertir la respuesta en JSON
-    const data = await response.json();
-    
-    // Verificar si los datos son un arreglo
-    if (Array.isArray(data)) {
-      return data.map((usuario, index) => ({
-        id: index + 1, // Si deseas asignar un ID de índice, puedes usar este
-        name: usuario.name,
-        email: usuario.email,
-        phone: usuario.phone,
-        profile: usuario.profile,
-        department: usuario.department,
-        tower: usuario.tower,
+    const token = localStorage.getItem('token'); // Recuperar el token
 
-      }));
-    } else {
-      // Si no es un arreglo, muestra el contenido de los datos
-      console.error('Los datos no son un arreglo válido:', data);
-      return [];
-    }
+    const response = await fetch(`${API_BASE_URL}/obtener_usuarios`, {
+
+      headers: {
+        'Authorization': `Bearer ${token}`, // Agregar el token
+      },
+    });
+
+    if (!response.ok) throw new Error('No se pudo obtener los usuarios');
+
+    const data = await response.json();
+    return Array.isArray(data) ? data.map((usuario, index) => ({
+      id: index + 1,
+      name: usuario.name,
+      email: usuario.email,
+      phone: usuario.phone,
+      profile: usuario.profile,
+      department: usuario.department,
+      tower: usuario.tower,
+    })) : [];
   } catch (error) {
     console.error('Error al obtener los usuarios:', error);
-    alert('Hubo un error al obtener los usuarios. Intenta nuevamente.');
     return [];
   }
 };
 
+
 export const getHistorialMultas = async (departamento: string): Promise<any[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/obtener_historial_multas/${departamento}`);
+    const token = localStorage.getItem('token'); 
+    const response = await fetch(`${API_BASE_URL}/obtener_historial_multas/${departamento}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!response.ok) {
       throw new Error('No se pudo obtener el historial de multas');
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error al obtener el historial de multas:', error);
     throw error;
   }
 };
+
 export const getMultasData = async (): Promise<any[]> => {
   try {
-    // Llamar a la nueva ruta para obtener la última multa de todos los usuarios
-    const response = await fetch(`${API_BASE_URL}/obtener_ultima_multa_todos`);
+    const token = localStorage.getItem('token'); // Recuperar el token
+
+    const response = await fetch(`${API_BASE_URL}/obtener_ultima_multa_todos`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Agregar el token
+      },
+    });
 
     if (!response.ok) {
       throw new Error('No se pudo obtener las últimas multas');
     }
 
-    // Convertir la respuesta en JSON
     const data = await response.json();
-
     console.log("Datos recibidos:", data);
 
-    if (Array.isArray(data)) {
-      return data.map((usuario, index) => {
-        // Si el usuario no tiene multas, mostramos una entrada vacía o un mensaje
-        if (!usuario.ultimaMulta) {
-          console.log(`El usuario ${usuario.name} no tiene multas.`);
-
-          // Retorna el usuario sin multas, con valores vacíos en las propiedades de multa
-          return {
-            id: `${index + 1}`,
-            usuario: usuario.name,
-            nombreCompleto: usuario.name,
-            departamento: usuario.department,
-            torre: usuario.tower,
-            multa: "Sin multas",
-            descripcion: "No tiene multas",
-            fechamulta: "N/A",
-          };
-        }
-
-        // Si el usuario tiene multas, devolvemos la última multa
-        return {
-          id: `${index + 1}`,
-          usuario: usuario.name,
-          nombreCompleto: usuario.name,
-          departamento: usuario.department,
-          torre: usuario.tower,
-          multa: usuario.ultimaMulta.multa,
-          descripcion: usuario.ultimaMulta.descripcion,
-          fechamulta: usuario.ultimaMulta.fechamulta,
-        };
-      });
-    } else {
+    if (!Array.isArray(data)) {
       console.error('Los datos no son un arreglo válido:', data);
       return [];
     }
+
+    return data.map((usuario, index) => {
+      const tieneMulta = usuario.ultimaMulta && usuario.ultimaMulta.multa;
+
+      return {
+        id: `${index + 1}`,
+        usuario: usuario.name,
+        nombreCompleto: usuario.name,
+        departamento: usuario.department,
+        torre: usuario.tower,
+        multa: tieneMulta ? usuario.ultimaMulta.multa : "Sin multas",
+        descripcion: tieneMulta ? usuario.ultimaMulta.descripcion : "No tiene multas",
+        fechamulta: tieneMulta ? usuario.ultimaMulta.fechamulta : "N/A",
+      };
+    });
   } catch (error) {
     console.error('Error al obtener las últimas multas:', error);
-    alert('Hubo un error al obtener las últimas multas. Intenta nuevamente.');
     return [];
   }
 };
+
+
   
 
   export const getPagosData = () => {
@@ -190,42 +178,45 @@ export interface Notificacion {
 
 export const obtenerNotificaciones = async (): Promise<Notificacion[]> => {
   try {
+    const token = localStorage.getItem('token');
+
     const response = await fetch(`${API_BASE_URL}/obtener_notificaciones`, {
-      method: 'GET', // Usamos GET ya que estamos trayendo datos
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Agregar token o autorización si es necesario
+        Authorization: `Bearer ${token}`, // Agregamos el token
       },
     });
 
     if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.message || 'Error al obtener las notificaciones');
+      throw new Error('Error al obtener las notificaciones');
     }
 
-    const data = await response.json();
-    return data; // Suponemos que la respuesta es un array de notificaciones
+    return await response.json(); // Suponemos que es un array de notificaciones
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Error de conexión');
+    console.error('Error al obtener las notificaciones:', error);
+    throw new Error('No se pudieron obtener las notificaciones.');
   }
 };
 
 export const borrarNotificacionesPorDepartamento = async (departamento: string): Promise<void> => {
   try {
+    const token = localStorage.getItem('token');
+
     const response = await fetch(`${API_BASE_URL}/notificaciones`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        // Agregar token o autorización si es necesario
+        Authorization: `Bearer ${token}`, // Agregamos el token
       },
       body: JSON.stringify({ departamento }),
     });
 
     if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.message || 'Error al borrar las notificaciones');
+      throw new Error('Error al borrar las notificaciones');
     }
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Error de conexión');
+    console.error('Error al borrar las notificaciones:', error);
+    throw new Error('No se pudieron borrar las notificaciones.');
   }
 };

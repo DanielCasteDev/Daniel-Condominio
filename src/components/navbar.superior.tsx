@@ -38,10 +38,12 @@ const SidebarNotificaciones: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchNotificaciones();
-    const interval = setInterval(fetchNotificaciones, 1000);
-    return () => clearInterval(interval);
-  }, [fetchNotificaciones]);
+    if (userRole !== 'superadmin') {
+      fetchNotificaciones();
+      const interval = setInterval(fetchNotificaciones, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [fetchNotificaciones, userRole]);
 
   return (
     <div className="relative">

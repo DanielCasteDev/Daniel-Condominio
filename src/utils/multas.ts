@@ -2,14 +2,18 @@ import { API_BASE_URL } from '../services/apiService';
 
 export const saveMulta = async (formData: any): Promise<void> => {
   try {
+    const token = localStorage.getItem('token');
     const { descripcion, fechamulta, departamento, multa } = formData;
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // Agregamos el token para autenticación
+    };
 
     // Realizar el POST para guardar la multa
     const multaResponse = await fetch(`${API_BASE_URL}/insertar_multas`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ descripcion, fechamulta, departamento, multa }),
     });
 
@@ -22,9 +26,7 @@ export const saveMulta = async (formData: any): Promise<void> => {
     // Realizar el POST para crear la notificación
     const notificacionResponse = await fetch(`${API_BASE_URL}/insertar_notis`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ descripcion, fechamulta, departamento, multa }),
     });
 
@@ -35,6 +37,6 @@ export const saveMulta = async (formData: any): Promise<void> => {
     console.log('Notificación registrada exitosamente');
   } catch (error) {
     console.error('Error al guardar la multa y la notificación:', error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw new Error('No se pudo guardar la multa y la notificación.');
   }
 };
