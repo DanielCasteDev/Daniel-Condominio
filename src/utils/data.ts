@@ -9,31 +9,25 @@ import { API_BASE_URL } from '../services/apiService';
 export interface LoginResponse {
   name: string;
   profile: string;
-  department: string; // Cambié 'departament' por 'department', ya que en tu base de datos es 'department'
+  department: string; 
+  rememberSession: boolean
 }
 
-export const loginUser = async (phone: string, password: string): Promise<LoginResponse> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, password }),
-    });
+export const loginUser = async (phone: string, password: string, rememberSession: boolean) => {
+  const response = await fetch(`${API_BASE_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ phone, password, rememberSession }),
+  });
 
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.message || 'Error al iniciar sesión');
-    }
-
-    const data = await response.json();
-    
-    // Guarda el token en localStorage
-    localStorage.setItem('token', data.token);
-
-    return data.user;
-  } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Error de conexión');
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al iniciar sesión');
   }
+
+  return response.json();
 };
 
 export const getPermisosData = () => {
@@ -219,4 +213,21 @@ export const borrarNotificacionesPorDepartamento = async (departamento: string):
     console.error('Error al borrar las notificaciones:', error);
     throw new Error('No se pudieron borrar las notificaciones.');
   }
+};
+
+
+
+export const updatePassword = async (username: string, newPassword: string): Promise<void> => {
+  // Simula una solicitud a una API con un retraso de 1 segundo
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Aquí puedes agregar lógica para validar la contraseña o simular errores
+      if (newPassword.length < 6) {
+        reject(new Error('La contraseña debe tener al menos 6 caracteres.'));
+      } else {
+        console.log(`Contraseña actualizada para el usuario ${username}. Nueva contraseña: ${newPassword}`);
+        resolve();
+      }
+    }, 1000); // Simula un retraso de 1 segundo
+  });
 };

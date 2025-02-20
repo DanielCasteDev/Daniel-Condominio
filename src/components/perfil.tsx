@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { getUsuariosData } from '../utils/data';
+import { getUsuariosData, updatePassword } from '../utils/data';
 
 const Perfil: React.FC = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [usuarios, setUsuarios] = useState<any[]>([]);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const userDepartment = localStorage.getItem('userDepartment');
   const userName = localStorage.getItem('userName') || 'Usuario';
 
@@ -18,6 +23,28 @@ const Perfil: React.FC = () => {
       setUsuarios(filteredUsuarios);
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    if (newPassword !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
+      await updatePassword(userName, newPassword);
+      setSuccess('Contraseña actualizada correctamente');
+      setError('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => {
+        setIsPasswordModalOpen(false); // Cierra el modal después de 2 segundos
+        setSuccess('');
+      }, 2000);
+    } catch (error) {
+      setError('Error al cambiar la contraseña');
+      setSuccess('');
     }
   };
 
@@ -83,13 +110,74 @@ const Perfil: React.FC = () => {
                 </ul>
               </div>
 
+              {/* Botón para abrir el modal de modificar contraseña */}
+              <button
+                onClick={() => setIsPasswordModalOpen(true)}
+                className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-all duration-300 mb-4"
+              >
+                Modificar Contraseña
+              </button>
+
               {/* Botón de cierre */}
               <button
                 onClick={() => setIsUserModalOpen(false)}
-                className="mt-6 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-300"
+                className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-all duration-300"
               >
                 Cerrar
               </button>
+            </div>
+          </div>,
+          modalRoot
+        )}
+
+      {/* Modal de modificar contraseña */}
+      {isPasswordModalOpen &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[10000]">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-96 border border-gray-100">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Cambiar Contraseña</h2>
+                <button
+                  onClick={() => setIsPasswordModalOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Formulario de modificar contraseña */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nueva Contraseña
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Confirmar Contraseña
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {success && <p className="text-green-500 text-sm">{success}</p>}
+                <button
+                  onClick={handlePasswordUpdate}
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-300"
+                >
+                  Cambiar Contraseña
+                </button>
+              </div>
             </div>
           </div>,
           modalRoot

@@ -8,42 +8,33 @@ const SidebarNotificaciones: React.FC = () => {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const userDepartment = localStorage.getItem('userDepartment');
   const userRole = localStorage.getItem('userProfile') || '';
 
   const fetchNotificaciones = useCallback(async () => {
     try {
       const data = await obtenerNotificaciones();
-      const filteredNotificaciones = data.filter(
-        (notificacion) => notificacion.departamento === userDepartment
-      );
-      setNotificaciones(filteredNotificaciones);
+      setNotificaciones(data);  // Aquí no filtramos las notificaciones por departamento
     } catch (error) {
       console.error('Error al obtener las notificaciones:', error);
     }
-  }, [userDepartment]);
+  }, []);
 
   const handleBorrarTodo = async () => {
     try {
-      if (userDepartment) {
-        await borrarNotificacionesPorDepartamento(userDepartment);
-        setNotificaciones([]);
-        console.log('Todas las notificaciones fueron eliminadas.');
-      } else {
-        console.error('No se encontró el departamento del usuario.');
-      }
+      // Se puede modificar si quieres borrar todas las notificaciones, independientemente del departamento
+      await borrarNotificacionesPorDepartamento('');  // Eliminar todas las notificaciones
+      setNotificaciones([]);
+      console.log('Todas las notificaciones fueron eliminadas.');
     } catch (error) {
       console.error('Error al borrar todas las notificaciones:', error);
     }
   };
 
   useEffect(() => {
-    if (userRole !== 'superadmin') {
-      fetchNotificaciones();
-      const interval = setInterval(fetchNotificaciones, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [fetchNotificaciones, userRole]);
+    fetchNotificaciones();
+    const interval = setInterval(fetchNotificaciones, 1000);
+    return () => clearInterval(interval);
+  }, [fetchNotificaciones]);
 
   return (
     <div className="relative">

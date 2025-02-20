@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'sonner'; // Asegúrate de importar Toaster
+import { Toaster } from 'sonner'; 
+import AuthToken from './middleware/AuthToken'; 
 import Login from './pages/auth/login';
 import Verificar from './pages/auth/verificar';
 import Dashboard from './pages/admin/dashboard';
@@ -15,8 +16,8 @@ import Permisos from './pages/user/permisos';
 
 const App: React.FC = () => {
   return (
-
     <Router>
+      <AuthToken /> 
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/Verificar" element={<Verificar />} />
@@ -29,7 +30,6 @@ const App: React.FC = () => {
         <Route path="/Multas" element={<Multas />} />
         <Route path="/Permisos" element={<Permisos />} />
         <Route path="/Pagos" element={<Pagos />} />
-
       </Routes>
       
       <Toaster />

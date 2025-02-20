@@ -1,0 +1,37 @@
+/* Animación de entrada y salida del modal */
+.notis-enter {
+    transform: translateX(100%); /* Inicia fuera de la pantalla */
+  }
+  
+  .notis-enter-active {
+    transform: translateX(0); /* Termina en su posición original */
+    transition: transform 600ms ease-in-out; /* Duración aumentada a 600ms */
+  }
+  
+  .notis-exit {
+    transform: translateX(0); /* Inicia en su posición original */
+  }
+  
+  .notis-exit-active {
+    transform: translateX(100%); /* Termina fuera de la pantalla */
+    transition: transform 600ms ease-in-out; /* Duración normal para la salida */
+  }
+  
+  /* Animación de entrada y salida del fondo oscuro */
+  .fondo-enter {
+    opacity: 0; /* Inicia transparente */
+  }
+  
+  .fondo-enter-active {
+    opacity: 2; /* Termina semitransparente */
+    transition: opacity 300ms ease-in-out; /* Duración de la animación */
+  }
+  
+  .fondo-exit {
+    opacity: 2; /* Inicia semitransparente */
+  }
+  
+  .fondo-exit-active {
+    opacity: 0; /* Termina transparente */
+    transition: opacity 300ms ease-in-out; /* Duración de la animación */
+  }
