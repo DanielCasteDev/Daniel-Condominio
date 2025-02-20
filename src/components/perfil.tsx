@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { getUsuariosData, updatePassword } from '../utils/data';
+import { getUsuariosData, updatePassword, logoutAllDevices } from '../utils/data';
 
 const Perfil: React.FC = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [usuarios, setUsuarios] = useState<any[]>([]);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -14,6 +15,7 @@ const Perfil: React.FC = () => {
   const userDepartment = localStorage.getItem('userDepartment');
   const userName = localStorage.getItem('userName') || 'Usuario';
 
+  // Obtener la lista de usuarios del departamento
   const fetchUsuarios = async () => {
     try {
       const data = await getUsuariosData();
@@ -31,29 +33,56 @@ const Perfil: React.FC = () => {
       setError('Las contraseñas no coinciden');
       return;
     }
-
+  
     try {
-      await updatePassword(userName, newPassword);
+      const userId = localStorage.getItem('userId'); // Obtener el userId del localStorage
+      if (!userId) {
+        throw new Error('No se encontró el userId en el localStorage.');
+      }
+  
+      await updatePassword(userId, newPassword); // Pasar userId en lugar de userName
       setSuccess('Contraseña actualizada correctamente');
       setError('');
       setNewPassword('');
       setConfirmPassword('');
-      setTimeout(() => {
-        setIsPasswordModalOpen(false); // Cierra el modal después de 2 segundos
-        setSuccess('');
-      }, 2000);
+  
+      // Mostrar el modal de confirmación para cerrar sesión en todos los dispositivos
+      setIsLogoutModalOpen(true);
     } catch (error) {
-      setError('Error al cambiar la contraseña');
+      setError(error instanceof Error ? error.message : 'Error al cambiar la contraseña');
       setSuccess('');
     }
   };
 
+  // Cerrar sesión en todos los dispositivos
+  const handleLogoutAllDevices = async () => {
+    try {
+      const userId = localStorage.getItem('userId'); // Obtener el userId del localStorage
+      if (!userId) {
+        throw new Error('No se encontró el userId en el localStorage.');
+      }
+  
+      // Llamar a la función que borra el token del usuario en la base de datos
+      await logoutAllDevices(userId);
+  
+      // Cerrar el modal de confirmación
+      setIsLogoutModalOpen(false);
+  
+      // Redirigir al usuario a la página de login
+      window.location.href = '/'; // Cambia esto por la ruta de tu página de login
+    } catch (error) {
+      console.error('Error al cerrar la sesión en todos los dispositivos:', error);
+    }
+  };
+
+  // Cargar la lista de usuarios cuando se abre el modal de perfil
   useEffect(() => {
     if (isUserModalOpen) {
       fetchUsuarios();
     }
   }, [isUserModalOpen]);
 
+  // Obtener el contenedor de modales
   const modalRoot = document.getElementById('modal-root');
 
   if (!modalRoot) {
@@ -63,6 +92,7 @@ const Perfil: React.FC = () => {
 
   return (
     <div className="relative">
+      {/* Botón para abrir el modal de perfil */}
       <button
         onClick={() => setIsUserModalOpen(!isUserModalOpen)}
         className="flex items-center hover:text-gray-800 transition-all duration-300 ease-in-out"
@@ -72,6 +102,7 @@ const Perfil: React.FC = () => {
         <span className="ml-2">{userName}</span>
       </button>
 
+      {/* Modal de perfil */}
       {isUserModalOpen &&
         ReactDOM.createPortal(
           <div className="fixed top-14 right-4 z-[9999]">
@@ -176,6 +207,44 @@ const Perfil: React.FC = () => {
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-300"
                 >
                   Cambiar Contraseña
+                </button>
+              </div>
+            </div>
+          </div>,
+          modalRoot
+        )}
+
+      {/* Modal de confirmación para cerrar sesión en todos los dispositivos */}
+      {isLogoutModalOpen &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[10000]">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-96 border border-gray-100">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Cerrar Sesión en Todos los Dispositivos</h2>
+                <button
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 mb-6">
+                ¿Deseas cerrar la sesión en todos los dispositivos? Esto eliminará tu token de acceso.
+              </p>
+
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-all duration-300"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleLogoutAllDevices}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300"
+                >
+                  Cerrar Sesión
                 </button>
               </div>
             </div>

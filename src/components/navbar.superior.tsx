@@ -9,24 +9,32 @@ const SidebarNotificaciones: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const userRole = localStorage.getItem('userProfile') || '';
-
+  const userDepartamento = localStorage.getItem('userDepartment') || '';
   const fetchNotificaciones = useCallback(async () => {
     try {
       const data = await obtenerNotificaciones();
-      setNotificaciones(data);  // Aquí no filtramos las notificaciones por departamento
+      console.log('Notificaciones obtenidas (sin filtrar):', data);
+      console.log('Departamento del usuario:', userDepartamento);
+
+      // Filtrar por "departamento"
+      const notificacionesFiltradas = data.filter(
+        notificacion => notificacion.departamento === userDepartamento
+      );
+
+      console.log('Notificaciones filtradas:', notificacionesFiltradas);
+      setNotificaciones(notificacionesFiltradas);
     } catch (error) {
       console.error('Error al obtener las notificaciones:', error);
     }
-  }, []);
+  }, [userDepartamento]);
 
   const handleBorrarTodo = async () => {
     try {
-      // Se puede modificar si quieres borrar todas las notificaciones, independientemente del departamento
-      await borrarNotificacionesPorDepartamento('');  // Eliminar todas las notificaciones
+      await borrarNotificacionesPorDepartamento(userDepartamento);
       setNotificaciones([]);
-      console.log('Todas las notificaciones fueron eliminadas.');
+      console.log('Todas las notificaciones del departamento fueron eliminadas.');
     } catch (error) {
-      console.error('Error al borrar todas las notificaciones:', error);
+      console.error('Error al borrar las notificaciones:', error);
     }
   };
 
@@ -54,7 +62,7 @@ const SidebarNotificaciones: React.FC = () => {
               )}
             </button>
           )}
-          <Perfil /> {/* Usa el componente Perfil aquí */}
+          <Perfil />
         </nav>
       </header>
 

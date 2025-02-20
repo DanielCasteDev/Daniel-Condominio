@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.webp';
-import { loginUser } from '../../utils/data'; // Función loginUser
+import { loginUser, getToken } from '../../utils/data'; 
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -16,12 +16,14 @@ const Login: React.FC = () => {
     try {
       const response = await loginUser(phoneNumber, password, rememberSession);
       
-      // Guardar datos en localStorage
       localStorage.setItem('userName', response.user.name);
       localStorage.setItem('userProfile', response.user.profile);
       localStorage.setItem('userDepartment', response.user.department);
-      localStorage.setItem('userId', response.user.userId); // Guardamos el userId
-      localStorage.setItem('token', response.token); // Guardamos el token
+      localStorage.setItem('userId', response.user.userId); 
+
+      // Obtener el token usando el userId
+      const tokenResponse = await getToken(response.user.userId);
+      localStorage.setItem('token', tokenResponse.token); 
 
       toast.success('Inicio de sesión exitoso. Redirigiendo...', {
         duration: 2000,

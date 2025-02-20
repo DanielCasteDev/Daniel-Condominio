@@ -29,6 +29,39 @@ export const loginUser = async (phone: string, password: string, rememberSession
 
   return response.json();
 };
+export const getToken = async (userId: string) => {
+  const response = await fetch(`${API_BASE_URL}/token/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al obtener el token');
+  }
+
+  return response.json();
+};
+
+// data.ts
+export const logoutAllDevices = async (userId: string) => {
+  const response = await fetch(`${API_BASE_URL}/logout-all-devices`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId }), // Enviar userId en lugar de username
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al cerrar la sesión en todos los dispositivos');
+  }
+
+  return response.json();
+};
 
 export const getPermisosData = () => {
   return [
@@ -217,17 +250,20 @@ export const borrarNotificacionesPorDepartamento = async (departamento: string):
 
 
 
-export const updatePassword = async (username: string, newPassword: string): Promise<void> => {
-  // Simula una solicitud a una API con un retraso de 1 segundo
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Aquí puedes agregar lógica para validar la contraseña o simular errores
-      if (newPassword.length < 6) {
-        reject(new Error('La contraseña debe tener al menos 6 caracteres.'));
-      } else {
-        console.log(`Contraseña actualizada para el usuario ${username}. Nueva contraseña: ${newPassword}`);
-        resolve();
-      }
-    }, 1000); // Simula un retraso de 1 segundo
+// data.ts
+export const updatePassword = async (userId: string, newPassword: string) => {
+  const response = await fetch(`${API_BASE_URL}/update-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, newPassword }), // Enviar userId en lugar de username
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al cambiar la contraseña');
+  }
+
+  return response.json();
 };

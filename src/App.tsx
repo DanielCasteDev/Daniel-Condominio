@@ -1,7 +1,9 @@
+// App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'sonner'; 
-import AuthToken from './middleware/AuthToken'; 
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import AuthToken from './middleware/AuthToken'; // Middleware para manejar el token
+import Token from './middleware/token'; // Middleware para manejar el token
 import Login from './pages/auth/login';
 import Verificar from './pages/auth/verificar';
 import Dashboard from './pages/admin/dashboard';
@@ -17,21 +19,33 @@ import Permisos from './pages/user/permisos';
 const App: React.FC = () => {
   return (
     <Router>
-      <AuthToken /> 
+      <AuthToken /> {/* Middleware para manejar el token */}
       <Routes>
+        {/* Rutas públicas (sin protección) */}
         <Route path="/" element={<Login />} />
         <Route path="/Verificar" element={<Verificar />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Usuarios" element={<Usuarios />} />
-        <Route path="/PagosAd" element={<PagosAd />} />
-        <Route path="/MultasAd" element={<MultasAd />} />
-        <Route path="/PermisosAd" element={<PermisosAd />} />
-        <Route path="/DashboardUsr" element={<DashboardUsr />} />
-        <Route path="/Multas" element={<Multas />} />
-        <Route path="/Permisos" element={<Permisos />} />
-        <Route path="/Pagos" element={<Pagos />} />
+
+        {/* Rutas protegidas (con protección) */}
+        <Route
+          element={
+            <>
+              <Token /> {/* Aplicar el middleware Token solo a rutas protegidas */}
+              <Outlet /> {/* Renderizar las rutas hijas aquí */}
+            </>
+          }
+        >
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Usuarios" element={<Usuarios />} />
+          <Route path="/PagosAd" element={<PagosAd />} />
+          <Route path="/MultasAd" element={<MultasAd />} />
+          <Route path="/PermisosAd" element={<PermisosAd />} />
+          <Route path="/DashboardUsr" element={<DashboardUsr />} />
+          <Route path="/Multas" element={<Multas />} />
+          <Route path="/Permisos" element={<Permisos />} />
+          <Route path="/Pagos" element={<Pagos />} />
+        </Route>
       </Routes>
-      
+
       <Toaster />
     </Router>
   );
