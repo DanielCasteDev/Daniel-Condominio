@@ -15,10 +15,8 @@ const NavbarUsr: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Eliminar los datos del localStorage
-    localStorage.removeItem('userName'); // Elimina el nombre del usuario
-    localStorage.removeItem('userProfile'); // Elimina el perfil, si lo guardas
-    // Redirigir al usuario a la página de inicio de sesión
+    localStorage.clear();
+
     navigate('/');
   };
 

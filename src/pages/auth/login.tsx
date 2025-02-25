@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.webp';
@@ -9,6 +9,21 @@ const Login: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberSession, setRememberSession] = useState(false);
+
+  // Verificar si el usuario ya tiene una sesión activa al montar el componente
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const userProfile = localStorage.getItem('userProfile');
+
+    if (userId) {
+      // Si hay un userId en el localStorage, redirigir al dashboard correspondiente
+      if (userProfile === 'superadmin') {
+        navigate('/dashboard');
+      } else {
+        navigate('/DashboardUsr');
+      }
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

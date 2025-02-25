@@ -38,7 +38,7 @@ const Token: React.FC = () => {
 
     updateToken();
 
-    const interval = setInterval(updateToken, 1000);
+    const interval = setInterval(updateToken, 10000);
 
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === 'tokenUpdated') {

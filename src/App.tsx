@@ -19,18 +19,16 @@ import Permisos from './pages/user/permisos';
 const App: React.FC = () => {
   return (
     <Router>
-      <AuthToken /> {/* Middleware para manejar el token */}
+      <AuthToken /> 
       <Routes>
-        {/* Rutas públicas (sin protección) */}
         <Route path="/" element={<Login />} />
         <Route path="/Verificar" element={<Verificar />} />
 
-        {/* Rutas protegidas (con protección) */}
         <Route
           element={
             <>
-              <Token /> {/* Aplicar el middleware Token solo a rutas protegidas */}
-              <Outlet /> {/* Renderizar las rutas hijas aquí */}
+              <Token /> 
+              <Outlet /> 
             </>
           }
         >
