@@ -1,11 +1,9 @@
-import { NavigateFunction } from "react-router-dom";
 
-export const authMiddleware = (navigate: NavigateFunction) => {
+export const authMiddleware = () => {
   const token = localStorage.getItem("token");
   if (!token) {
     localStorage.clear();
-    navigate("/");
-    return true; 
+    return true; // Indica que el usuario no tiene sesión
   }
 
   try {
@@ -14,14 +12,12 @@ export const authMiddleware = (navigate: NavigateFunction) => {
 
     if (isExpired) {
       localStorage.clear();
-      navigate("/");
-      return true; 
+      return true; // Indica que el token ha expirado
     }
   } catch (error) {
     localStorage.clear();
-    navigate("/");
-    return true; 
+    return true;
   }
 
-  return false; 
+  return false; // Token válido
 };

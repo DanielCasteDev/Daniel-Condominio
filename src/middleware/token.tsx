@@ -7,7 +7,7 @@ const Token: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const excludedPaths = ['/', '/Verificar'];
+    const excludedPaths = ['/', '/Verificar','/forgot-password'];
 
     if (excludedPaths.includes(location.pathname)) {
       return;

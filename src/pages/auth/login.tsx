@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Eliminamos Link y usamos navigate
 import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.webp';
-import { loginUser, getToken } from '../../utils/data'; 
+import { loginUser, getToken } from '../../utils/data';
+import { CSSTransition } from 'react-transition-group';
+import '../../style/modal.css';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberSession, setRememberSession] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Verificar si el usuario ya tiene una sesión activa al montar el componente
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     const userProfile = localStorage.getItem('userProfile');
 
     if (userId) {
-      // Si hay un userId en el localStorage, redirigir al dashboard correspondiente
-      if (userProfile === 'superadmin') {
-        navigate('/dashboard');
-      } else {
-        navigate('/DashboardUsr');
-      }
+      navigate(userProfile === 'superadmin' ? '/dashboard' : '/DashboardUsr');
     }
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await loginUser(phoneNumber, password, rememberSession);
@@ -36,34 +34,29 @@ const Login: React.FC = () => {
       localStorage.setItem('userDepartment', response.user.department);
       localStorage.setItem('userId', response.user.userId); 
 
-      // Obtener el token usando el userId
       const tokenResponse = await getToken(response.user.userId);
-      localStorage.setItem('token', tokenResponse.token); 
+      localStorage.setItem('token', tokenResponse.token);
 
-      toast.success('Inicio de sesión exitoso. Redirigiendo...', {
-        duration: 2000,
-      });
+      toast.success('Inicio de sesión exitoso. Redirigiendo...', { duration: 2000 });
 
       setTimeout(() => {
-        if (response.user.profile === 'superadmin') {
-          navigate('/dashboard');
-        } else {
-          navigate('/DashboardUsr');
-        }
+        navigate(response.user.profile === 'superadmin' ? '/dashboard' : '/DashboardUsr');
       }, 2000);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Error al iniciar sesión', {
-        duration: 3000,
-      });
+      toast.error(error instanceof Error ? error.message : 'Error al iniciar sesión', { duration: 3000 });
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleForgotPassword = () => {
+    navigate('/Restablecer'); // Redirige a la página de recuperación de contraseña
   };
 
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${fondoImage})`,
-      }}
+      style={{ backgroundImage: `url(${fondoImage})` }}
     >
       <div className="bg-white bg-opacity-80 rounded-lg p-8 w-11/12 sm:w-1/2 md:w-1/3 shadow-xl">
         <div className="flex justify-center mb-6">
@@ -87,6 +80,16 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md mb-4"
             />
+            {/* Botón para recuperar contraseña */}
+            <div className="w-full text-right mb-4">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                ¿Olvidaste la contraseña?
+              </button>
+            </div>
             <div className="flex items-center mb-4">
               <input
                 type="checkbox"
@@ -102,11 +105,18 @@ const Login: React.FC = () => {
             <button
               type="submit"
               className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 font-semibold transition duration-300 rounded-md"
+              disabled={isLoading}
             >
-              Continuar
+              {isLoading ? 'Cargando...' : 'Continuar'}
             </button>
           </div>
         </form>
+
+        <CSSTransition in={isLoading} timeout={300} classNames="modal" unmountOnExit>
+          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+            <div className="modal-loading"></div>
+          </div>
+        </CSSTransition>
       </div>
     </div>
   );
