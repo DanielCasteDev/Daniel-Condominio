@@ -12,7 +12,7 @@ const AuthGuard: React.FC = () => {
   useEffect(() => {
     const checkToken = () => {
       // No validar token en las rutas de login o verificación
-      if (location.pathname === "/" || location.pathname === "/Restablecer") {
+      if (location.pathname === "/" || location.pathname.startsWith("/Restablecer")) {
         return;
       }
 

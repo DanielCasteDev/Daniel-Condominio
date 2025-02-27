@@ -22,7 +22,7 @@ const App: React.FC = () => {
       <AuthToken /> 
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Restablecer" element={<Verificar />} />
+        <Route path="/Restablecer/:token" element={<Verificar />} />
         <Route
           element={
             <>
