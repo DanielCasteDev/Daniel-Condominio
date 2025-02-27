@@ -12,10 +12,10 @@ const AuthGuard: React.FC = () => {
   useEffect(() => {
     const checkToken = () => {
       // No validar token en las rutas de login o verificación
-if (location.pathname === "/" || location.pathname==="/Restablecer") {
+      if (location.pathname === "/" || location.pathname.startsWith("/restablecer/")) {
         return;
       }
-
+      
       const tokenExpired = authMiddleware();
       if (tokenExpired && !toastShown) {
         toast.error("Sesión cerrada", { duration: 5000 });

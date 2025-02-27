@@ -1,4 +1,3 @@
-// middleware/token.tsx
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getToken } from '../utils/data'; 
@@ -7,13 +6,12 @@ const Token: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const excludedPaths = ['/', '/Verificar','/restablecer'];
-
-    if (excludedPaths.includes(location.pathname)) {
+    const excludedPaths = ['/', '/Verificar'];
+    if (excludedPaths.includes(location.pathname) || location.pathname.startsWith('/restablecer/')) {
       return;
     }
 
-    const userId = localStorage.getItem('userId'); 
+    const userId = localStorage.getItem('userId');
 
     const updateToken = async () => {
       if (userId) {
@@ -23,7 +21,6 @@ const Token: React.FC = () => {
 
           if (newToken) {
             localStorage.setItem('token', newToken);
-
             localStorage.setItem('tokenUpdated', JSON.stringify({ token: newToken, timestamp: Date.now() }));
           } else {
             console.warn('No se encontró un token válido en la base de datos.');
@@ -58,7 +55,7 @@ const Token: React.FC = () => {
     };
   }, [location.pathname]);
 
-  return null; 
+  return null;
 };
 
 export default Token;
