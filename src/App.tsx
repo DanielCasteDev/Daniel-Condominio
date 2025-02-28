@@ -15,6 +15,7 @@ import DashboardUsr from './pages/user/dashboard.usr';
 import Multas from './pages/user/multas';
 import Pagos from './pages/user/pagos';
 import Permisos from './pages/user/permisos';
+import Numero from './pages/auth/numero';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/restablecer/:token" element={<Verificar />} />
+        <Route path="/numero" element={<Numero />} />
+
         <Route
           element={
             <>

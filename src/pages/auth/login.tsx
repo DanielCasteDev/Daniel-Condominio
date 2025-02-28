@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Eliminamos Link y usamos navigate
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import fondoImage from '../../assets/fondo.webp';
 import { loginUser, getToken } from '../../utils/data';
@@ -26,13 +26,23 @@ const Login: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Asegúrate de que el número de teléfono tenga 10 dígitos
+    if (phoneNumber.length !== 10) {
+      toast.error('El número de celular debe tener 10 dígitos', { duration: 3000 });
+      setIsLoading(false);
+      return;
+    }
+
+    // Agrega la lada de México al número de teléfono
+    const fullPhoneNumber = `+52${phoneNumber}`;
+
     try {
-      const response = await loginUser(phoneNumber, password, rememberSession);
-      
+      const response = await loginUser(fullPhoneNumber, password, rememberSession);
+
       localStorage.setItem('userName', response.user.name);
       localStorage.setItem('userProfile', response.user.profile);
       localStorage.setItem('userDepartment', response.user.department);
-      localStorage.setItem('userId', response.user.userId); 
+      localStorage.setItem('userId', response.user.userId);
 
       const tokenResponse = await getToken(response.user.userId);
       localStorage.setItem('token', tokenResponse.token);
@@ -50,7 +60,7 @@ const Login: React.FC = () => {
   };
 
   const handleForgotPassword = () => {
-    navigate('/Restablecer'); // Redirige a la página de recuperación de contraseña
+    navigate('/numero');
   };
 
   return (
@@ -65,14 +75,22 @@ const Login: React.FC = () => {
         <h1 className="text-4xl font-bold text-center text-black mb-6">INICIAR SESIÓN</h1>
         <form onSubmit={handleSubmit} className="relative">
           <div className="flex flex-col items-start border rounded-lg overflow-hidden shadow-md p-4">
-            <input
-              type="text"
-              placeholder="Número de Celular"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md mb-4"
-              maxLength={10}
-            />
+            <div className="flex items-center w-full mb-4">
+              <span className="px-4 py-3 bg-gray-200 text-gray-700 border rounded-l-md">+52</span>
+              <input
+                type="text"
+                placeholder="Número de Celular"
+                value={phoneNumber}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, ''); // Solo permite números
+                  if (value.length <= 10) {
+                    setPhoneNumber(value);
+                  }
+                }}
+                className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-r-md"
+                maxLength={10}
+              />
+            </div>
             <input
               type="password"
               placeholder="Contraseña"
@@ -80,7 +98,6 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 focus:outline-none bg-white text-gray-700 border rounded-md mb-4"
             />
-            {/* Botón para recuperar contraseña */}
             <div className="w-full text-right mb-4">
               <button
                 type="button"

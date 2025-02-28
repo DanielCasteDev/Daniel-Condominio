@@ -1,7 +1,49 @@
 import { API_BASE_URL } from '../services/apiService';
 
 
+export const sendWhatsAppMessage = async (phoneNumber: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/send-whatsapp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phoneNumber }),
+    });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error al enviar el mensaje de WhatsApp');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error en sendWhatsAppMessage:', error);
+    throw error;
+  }
+};
+
+export const verifyToken = async (token: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/verify-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Token inválido o no encontrado");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error en verifyToken:", error);
+    throw error;
+  }
+};
 
 
 

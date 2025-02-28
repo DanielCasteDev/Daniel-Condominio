@@ -6,7 +6,7 @@ const Token: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const excludedPaths = ['/', '/Verificar'];
+    const excludedPaths = ['/', '/Verificar','/numero'];
     if (excludedPaths.includes(location.pathname) || location.pathname.startsWith('/restablecer/')) {
       return;
     }
@@ -18,7 +18,6 @@ const Token: React.FC = () => {
         try {
           const tokenResponse = await getToken(userId);
           const newToken = tokenResponse.token;
-
           if (newToken) {
             localStorage.setItem('token', newToken);
             localStorage.setItem('tokenUpdated', JSON.stringify({ token: newToken, timestamp: Date.now() }));
