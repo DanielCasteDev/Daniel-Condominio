@@ -63,9 +63,14 @@ const Usuarios: React.FC = () => {
     try {
       // Eliminar el campo 'id' si existe, ya que MongoDB lo maneja automáticamente
       const { id, ...usuarioData } = formData;
-
+  
+      // Verificar y agregar la lada +52 si no está presente
+      if (usuarioData.phone && !usuarioData.phone.startsWith('+52')) {
+        usuarioData.phone = `+52${usuarioData.phone}`;
+      }
+  
       console.log("Guardando usuario:", usuarioData); // Verifica los datos sin el id
-
+  
       await saveUsuario(usuarioData); // Asegúrate de enviar solo los campos necesarios
       const updatedData = await getUsuariosData();
       setUsuariosData(updatedData);
