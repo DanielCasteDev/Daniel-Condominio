@@ -1,9 +1,8 @@
-// App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import AuthToken from './middleware/AuthToken'; // Middleware para manejar el token
-import Token from './middleware/token'; // Middleware para manejar el token
+import AuthToken from './middleware/AuthToken'; 
+import Token from './middleware/token'; 
 import Login from './pages/auth/login';
 import Verificar from './pages/auth/verificar';
 import Dashboard from './pages/admin/dashboard';
@@ -16,6 +15,7 @@ import Multas from './pages/user/multas';
 import Pagos from './pages/user/pagos';
 import Permisos from './pages/user/permisos';
 import Numero from './pages/auth/numero';
+import InstallPWA from './install_pwa'; // 👉 Componente para instalar la app
 
 const App: React.FC = () => {
   return (
@@ -47,6 +47,7 @@ const App: React.FC = () => {
       </Routes>
 
       <Toaster />
+      <InstallPWA /> {/* 👉 Botón flotante para instalar la app */}
     </Router>
   );
 };
